@@ -34,6 +34,15 @@ app.get('/oauth/google',
       res.redirect('/profile');
     }
   );
+
+  // Kakao OAuth 라우트 설정
+app.get('/oauth/kakao',
+  passport.authenticate('kakao', { failureRedirect: '/login' }), 
+  (req, res) => {
+      res.redirect('/profile'); 
+  }
+);
+
 // 서버 실행
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
