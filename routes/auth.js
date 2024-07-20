@@ -12,5 +12,18 @@ router.get('/google',
       res.redirect('/profile');
     }
   );
+ 
+  //카카오 로그인
+router.get('/kakao',
+    passport.authenticate('kakao')
+);
+
+router.get('/kakao/callback', 
+    passport.authenticate('kakao', { failureRedirect: '/login' }),
+    (req, res) => {
+        res.redirect('/profile');
+    }
+);
+
 
 module.exports = router;
