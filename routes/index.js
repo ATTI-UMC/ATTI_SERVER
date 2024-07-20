@@ -27,7 +27,7 @@ router.get('/logout', (req, res) => {
 const connection = mysql.createConnection({
   host: 'localhost',  // MySQL 호스트 주소
   user: 'root',   // MySQL 사용자 이름
-  password: '3386',  // MySQL 비밀번호
+  password: '1112',  // MySQL 비밀번호
   database: 'ATTI'  // ATTI 데이터베이스 이름
 });
 
