@@ -3,6 +3,7 @@ require('dotenv').config();
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const KakaoStrategy = require('passport-kakao').Strategy;
+const jwt = require('jsonwebtoken');
 
 module.exports = function() {
     passport.use(new GoogleStrategy({
@@ -11,17 +12,18 @@ module.exports = function() {
         callbackURL: process.env.GOOGLE_CALLBACK_URL
     },
     (token, tokenSecret, profile, done) => {
-        return done(null, profile);
+        const jwtToken = jwt.sign(profile, process.env.JWT_SECRET, { expiresIn: '1h' });
+        return done(null, { profile, token: jwtToken });
     }));
 
-    //카카오 로그인
     passport.use(new KakaoStrategy({
         clientID: process.env.KAKAO_CLIENT_ID,
         clientSecret: process.env.KAKAO_CLIENT_SECRET,
         callbackURL: process.env.KAKAO_CALLBACK_URL
     },
     (accessToken, refreshToken, profile, done) => {
-        return done(null, profile);
+        const jwtToken = jwt.sign(profile, process.env.JWT_SECRET, { expiresIn: '1h' });
+        return done(null, { profile, token: jwtToken });
     }));
 
     passport.serializeUser((user, done) => {

@@ -1,6 +1,7 @@
 const mysql = require('mysql');
 const express = require('express');
 const router = express.Router();
+const authMiddleware = require('../middleware/auth');
 
 router.get('/', (req, res) => {
   res.send('<a href="/auth/google">Login with Google</a><br><a href="/auth/kakao">Login with Kakao</a>');
@@ -23,15 +24,14 @@ router.get('/logout', (req, res) => {
     });
 });
 
-// MySQL 연결 설정, 개개인마다 다를겁니다.
+// MySQL 연결 설정
 const connection = mysql.createConnection({
-  host: 'localhost',  // MySQL 호스트 주소
-  user: 'root',   // MySQL 사용자 이름
-  password: '1112',  // MySQL 비밀번호
-  database: 'ATTI'  // ATTI 데이터베이스 이름
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
 
-// MySQL 연결
 connection.connect((err) => {
   if (err) {
     console.error('Error connecting to MySQL: ' + err.stack);
@@ -39,7 +39,6 @@ connection.connect((err) => {
   }
   console.log('Connected to MySQL as id ' + connection.threadId);
 });
-
 
 // 사용자 정보 가져오기 API
 router.get('/user/:id', (req, res) => {

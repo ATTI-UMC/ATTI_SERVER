@@ -11,6 +11,11 @@ const path = require('path');
 
 const app = express();
 
+// 미들웨어 설정
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
 // 세션 설정, 시크릿키는 crypto 메소드로 생성합니다.
 const secret = crypto.randomBytes(64).toString('hex');
 app.use(session({
