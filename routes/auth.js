@@ -9,15 +9,19 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
 router.get('/google/callback', 
     passport.authenticate('google', { failureRedirect: '/login' }),
     (req, res) => {
-        const token = jwt.sign(
-            { id: req.user.id, displayName: req.user.displayName }, 
-            process.env.JWT_SECRET, 
-            { expiresIn: '1h' }
-        );
-        res.redirect(`/profile?token=${token}`);
+        req.login(req.user, (err) => {
+            if (err) {
+                return next(err);
+            }
+            const token = jwt.sign(
+                { id: req.user.id, displayName: req.user.displayName }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+            res.redirect(`/profile?token=${token}`);
+        });
     }
 );
- 
   //카카오 로그인
 router.get('/kakao',
     passport.authenticate('kakao')
