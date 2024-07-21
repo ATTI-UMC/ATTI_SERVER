@@ -19,7 +19,7 @@ router.get('/logout', (req, res) => {
         if (err) {
             return next(err);
         }
-        res.redirect('/');
+        res.redirect('/')
     });
 });
 
@@ -40,5 +40,25 @@ connection.connect((err) => {
   console.log('Connected to MySQL as id ' + connection.threadId);
 });
 
+
+// 사용자 정보 가져오기 API
+router.get('/user/:id', (req, res) => {
+    const userId = req.params.id;
+  
+    // MySQL 쿼리 작성
+    const query = 'SELECT * FROM User WHERE userid = ?';
+  
+    // 데이터베이스에서 사용자 정보 조회
+    connection.query(query, [userId], (err, results) => {
+      if (err) {
+        console.error('Error fetching user data:', err);
+        res.status(500).json({ error: 'An error occurred' });
+      } else if (results.length === 0) {
+        res.status(404).json({ message: 'User not found' });
+      } else {
+        res.json(results[0]);
+      }
+    });
+  });
 
 module.exports = router;
