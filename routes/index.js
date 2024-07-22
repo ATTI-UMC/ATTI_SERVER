@@ -1,11 +1,11 @@
 const mysql = require('mysql');
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middleware/auth');
+
 
 router.get('/', (req, res) => {
-  res.send('<a href="/auth/google">Login with Google</a><br><a href="/auth/kakao">Login with Kakao</a>');
-}); //카카오 구글 둘 다
+  res.send('<a href="/auth/google">Login with Google</a><br></a>');
+}); //구글만
 
 
 router.get('/profile', (req, res) => {
