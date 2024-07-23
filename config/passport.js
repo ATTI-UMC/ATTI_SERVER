@@ -32,14 +32,21 @@ function configurePassport() {
         }
         if (results.length === 0) {
           // 사용자 정보가 없으면 기본값으로 삽입
-          const nickname = profile.displayName.slice(0, 5);
-          const defaultMBTI = 'ESTJ'; // 기본 MBTI 값
+          const nickname = profile.displayName ? profile.displayName.slice(0, 5) : 'guest';
+          const defaultMBTI = 'IIII'; // 기본 MBTI 값
           const insertQuery = 'INSERT INTO User (userid, id, nickname, name, MBTI_FK) VALUES (?, ?, ?, ?, ?)';
           connection.query(insertQuery, [profile.id, profile.id, nickname, profile.displayName, defaultMBTI], (err) => {
             if (err) {
               return done(err);
             }
-            return done(null, { ...profile, isNewUser: true });
+            const newUser = {
+              userid: profile.id,
+              id: profile.id,
+              nickname: nickname,
+              name: profile.displayName,
+              MBTI_FK: defaultMBTI
+            };
+            return done(null, newUser);
           });
         } else {
           return done(null, results[0]);
@@ -49,11 +56,17 @@ function configurePassport() {
   ));
 
   passport.serializeUser((user, done) => {
-    done(null, user);
+    done(null, user.userid);
   });
 
-  passport.deserializeUser((user, done) => {
-    done(null, user);
+  passport.deserializeUser((id, done) => {
+    const query = 'SELECT * FROM User WHERE userid = ?';
+    connection.query(query, [id], (err, results) => {
+      if (err) {
+        return done(err);
+      }
+      done(null, results[0]);
+    });
   });
 }
 

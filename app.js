@@ -32,6 +32,8 @@ app.use(session({
     }
 }));
 
+
+
 configurePassport();
 app.use(passport.initialize());
 app.use(passport.session());
@@ -53,7 +55,7 @@ app.get('/oauth/google',
   }
 );
 
-app.use((req, res, next) => {
+app.use((req, res, next) => {//오류 체크용
   console.log('Session:', req.session);
   console.log('User:', req.user);
   next();
