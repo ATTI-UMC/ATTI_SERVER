@@ -2,17 +2,16 @@ const mysql = require('mysql');
 const express = require('express');
 const router = express.Router();
 
-
 router.get('/', (req, res) => {
   res.send('<a href="/auth/google">Login with Google</a><br></a>');
 }); //구글만
-
 
 router.get('/profile', (req, res) => {
     if (!req.isAuthenticated()) {
         return res.redirect('/');
     }
-    res.send(`안녕하세요, ${req.user.displayName}님!`);
+    // req.user 객체를 사용합니다.
+    res.send(`안녕하세요, ${req.user.name}님!<br>MBTI: ${req.user.MBTI_FK}`);
 });
 
 router.get('/logout', (req, res) => {

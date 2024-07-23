@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
-const configurePassport = require('./config/passport');
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const ocrRouter = require('./routes/ocr');
@@ -11,6 +10,7 @@ const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const path = require('path');
 const { swaggerUi, swaggerSpec } = require('./config/swagger.config');
+const configurePassport = require('./config/passport');
 
 const app = express();
 
@@ -44,17 +44,21 @@ app.use('/auth', authRouter);
 app.use('/ocr', ocrRouter);
 app.use('/user', userRouter);
 
+
 app.get('/oauth/google',
-    passport.authenticate('google', { failureRedirect: '/login' }),
-    (req, res) => {
-      res.redirect('/profile');
-    }
+  passport.authenticate('google', { failureRedirect: '/' }),
+  (req, res) => {
+    console.log('User after authentication:', req.user);
+    res.redirect('/profile');
+  }
 );
 
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
+app.use((req, res, next) => {
+  console.log('Session:', req.session);
+  console.log('User:', req.user);
+  next();
 });
+
 ``
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
