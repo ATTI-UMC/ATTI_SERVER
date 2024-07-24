@@ -10,6 +10,24 @@ const connection = mysql.createConnection({
   database: process.env.DB_NAME
 });
 
+/**
+ * @swagger
+ * /user/mbti:
+ *   get:
+ *     summary: MBTI 입력 폼 제공
+ *     description: 로그인한 사용자에게 MBTI 입력 폼을 제공합니다.
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: MBTI 입력 폼 HTML
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
+ *       401:
+ *         description: 인증되지 않은 사용자
+ */
 router.get('/mbti', (req, res) => {
   if (!req.session || !req.session.passport || !req.session.passport.user) {
     return res.status(401).send('Unauthorized');
@@ -24,6 +42,34 @@ router.get('/mbti', (req, res) => {
   `);
 });
 
+/**
+ * @swagger
+ * /user/mbti:
+ *   post:
+ *     summary: MBTI 정보 저장
+ *     description: 사용자의 MBTI 정보를 데이터베이스에 저장합니다.
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               mbti:
+ *                 type: string
+ *                 description: 사용자의 MBTI
+ *             required:
+ *               - mbti
+ *     responses:
+ *       302:
+ *         description: 프로필 페이지로 리다이렉트
+ *       401:
+ *         description: 인증되지 않은 사용자
+ *       500:
+ *         description: 서버 오류
+ */
 router.post('/mbti', (req, res) => {
   const { mbti } = req.body;
   const user = req.session.passport.user;

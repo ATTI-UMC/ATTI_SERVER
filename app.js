@@ -9,9 +9,8 @@ const userRouter = require('./routes/user');
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const path = require('path');
-const { swaggerUi, swaggerSpec } = require('./config/swagger.config');
+const { swaggerUi, swaggerSpec } = require('./swagger/swagger.config.js');
 const configurePassport = require('./config/passport');
-
 const app = express();
 
 
