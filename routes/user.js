@@ -40,7 +40,7 @@ router.get('/mbti', (req, res) => {
       <button type="submit">Submit</button>
     </form>
   `);
-});
+}); //이거 json으로 바꿔야 하고
 
 /**
  * @swagger

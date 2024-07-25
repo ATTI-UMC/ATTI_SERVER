@@ -25,28 +25,37 @@ function configurePassport() {
       callbackURL: process.env.GOOGLE_CALLBACK_URL
     },
     function(accessToken, refreshToken, profile, done) {
-      const query = 'SELECT * FROM User WHERE userid = ?';
+      const query = 'SELECT * FROM User WHERE id = ?';
       connection.query(query, [profile.id], (err, results) => {
         if (err) {
           return done(err);
         }
         if (results.length === 0) {
-          // 사용자 정보가 없으면 기본값으로 삽입
-          const nickname = profile.displayName ? profile.displayName.slice(0, 5) : 'guest';
-          const defaultMBTI = 'IIII'; // 기본 MBTI 값
-          const insertQuery = 'INSERT INTO User (userid, id, nickname, name, MBTI_FK) VALUES (?, ?, ?, ?, ?)';
-          connection.query(insertQuery, [profile.id, profile.id, nickname, profile.displayName, defaultMBTI], (err) => {
+          // 사용자 정보가 없으면 새로운 userid 할당
+          const getMaxUserIdQuery = 'SELECT MAX(userid) AS maxUserid FROM User';
+          connection.query(getMaxUserIdQuery, (err, results) => {
             if (err) {
               return done(err);
             }
-            const newUser = {
-              userid: profile.id,
-              id: profile.id,
-              nickname: nickname,
-              name: profile.displayName,
-              MBTI_FK: defaultMBTI
-            };
-            return done(null, newUser);
+            const maxUserid = results[0].maxUserid || 0;
+            const newUserid = maxUserid + 1;
+
+            const nickname = profile.displayName ? profile.displayName.slice(0, 5) : 'guest';
+            const defaultMBTI = 'IIII'; // 기본 MBTI 값
+            const insertQuery = 'INSERT INTO User (userid, id, nickname, name, MBTI_FK) VALUES (?, ?, ?, ?, ?)';
+            connection.query(insertQuery, [newUserid, profile.id, nickname, profile.displayName, defaultMBTI], (err) => {
+              if (err) {
+                return done(err);
+              }
+              const newUser = {
+                userid: newUserid,
+                id: profile.id,
+                nickname: nickname,
+                name: profile.displayName,
+                MBTI_FK: defaultMBTI
+              };
+              return done(null, newUser);
+            });
           });
         } else {
           return done(null, results[0]);
