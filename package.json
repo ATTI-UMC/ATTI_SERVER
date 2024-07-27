@@ -23,7 +23,8 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-kakao": "^1.0.1",
     "swagger": "^0.7.5",
-    "tesseract.js": "^5.1.0"
+    "tesseract.js": "^5.1.0",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "swagger-jsdoc": "^6.2.8",

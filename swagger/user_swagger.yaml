@@ -30,7 +30,9 @@ paths:
                 type: string
         '302':
           description: Redirect to home if not authenticated
-  /profile/mbti:
+      security:
+        - sessionAuth: []
+  /user/mbti:
     post:
       summary: Update user MBTI
       description: Updates the user's MBTI value
@@ -50,6 +52,8 @@ paths:
           description: Redirect to profile page on success
         '500':
           description: Internal server error
+      security:
+        - sessionAuth: []
   /logout:
     get:
       summary: Logout
@@ -57,6 +61,8 @@ paths:
       responses:
         '302':
           description: Redirect to home page
+      security:
+        - sessionAuth: []
   /user/{id}:
     get:
       summary: Get user information
@@ -85,11 +91,13 @@ paths:
           description: User not found
         '500':
           description: Internal server error
+      security:
+        - sessionAuth: []
 components:
   securitySchemes:
     sessionAuth:
       type: apiKey
       in: cookie
-      name: session
+      name: connect.sid # express-session의 기본 쿠키 이름
 security:
   - sessionAuth: []
