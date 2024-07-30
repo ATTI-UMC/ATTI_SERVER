@@ -1,46 +1,62 @@
-
+require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
-const passportConfig = require('./config/passport');
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const ocrRouter = require('./routes/ocr');
+const userRouter = require('./routes/user');
+const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const path = require('path');
+const { swaggerUi, swaggerSpec } = require('./swagger/swagger.config');
+const configurePassport = require('./config/passport');
 
 const app = express();
 
-// 세션 설정, 시크릿키는 crypto 메소드로 생성합니다.
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
 const secret = crypto.randomBytes(64).toString('hex');
 app.use(session({
-    secret: secret,
-    resave: false,
-    saveUninitialized: true
+  secret: secret,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    httpOnly: true,
+    sameSite: 'lax',
+  },
 }));
 
-// Passport 초기화
-passportConfig();
+configurePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-// 정적 파일 서빙
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Swagger 설정
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// 라우트 설정
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/ocr', ocrRouter);
+app.use('/user', userRouter);
 
 app.get('/oauth/google',
-    passport.authenticate('google', { failureRedirect: '/login' }),
-    (req, res) => {
-      res.redirect('/profile');
-    }
+  passport.authenticate('google', { failureRedirect: '/' }),
+  (req, res) => {
+    console.log('User after authentication:', req.user);
+    res.redirect('/profile');
+  }
 );
 
-// 서버 실행
+app.use((req, res, next) => {
+  res.status(404).send('Not Found');
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });

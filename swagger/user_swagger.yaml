@@ -1,0 +1,103 @@
+openapi: 3.0.0
+info:
+  title: User API
+  description: API for user authentication, profile management, and MBTI settings
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /:
+    get:
+      summary: Home page
+      description: Displays a login link
+      responses:
+        '200':
+          description: HTML content with login link
+          content:
+            text/html:
+              schema:
+                type: string
+  /profile:
+    get:
+      summary: User profile page
+      description: Displays user profile or MBTI input form
+      responses:
+        '200':
+          description: HTML content with user profile or MBTI form
+          content:
+            text/html:
+              schema:
+                type: string
+        '302':
+          description: Redirect to home if not authenticated
+      security:
+        - sessionAuth: []
+  /user/mbti:
+    post:
+      summary: Update user MBTI
+      description: Updates the user's MBTI value
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                mbti:
+                  type: string
+              required:
+                - mbti
+      responses:
+        '302':
+          description: Redirect to profile page on success
+        '500':
+          description: Internal server error
+      security:
+        - sessionAuth: []
+  /logout:
+    get:
+      summary: Logout
+      description: Logs out the current user
+      responses:
+        '302':
+          description: Redirect to home page
+      security:
+        - sessionAuth: []
+  /user/{id}:
+    get:
+      summary: Get user information
+      description: Retrieves user information by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userid:
+                    type: string
+                  name:
+                    type: string
+                  MBTI_FK:
+                    type: string
+        '404':
+          description: User not found
+        '500':
+          description: Internal server error
+      security:
+        - sessionAuth: []
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: connect.sid # express-session의 기본 쿠키 이름
+security:
+  - sessionAuth: []
