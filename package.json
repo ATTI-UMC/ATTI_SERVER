@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -23,6 +24,7 @@
     "mysql2": "^3.10.3",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
+    "passport-kakao": "^1.0.1",
     "passport-kakao": "^1.0.1",
     "swagger": "^0.7.5",
     "tesseract.js": "^5.1.0",
