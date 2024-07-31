@@ -6,6 +6,7 @@ const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const ocrRouter = require('./routes/ocr');
 const userRouter = require('./routes/user');
+const boardRouter = require('./routes/board');
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const path = require('path');
@@ -43,6 +44,7 @@ app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/ocr', ocrRouter);
 app.use('/user', userRouter);
+app.use('/board', boardRouter);
 
 app.get('/oauth/google',
   passport.authenticate('google', { failureRedirect: '/' }),
