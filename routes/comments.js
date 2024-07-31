@@ -3,7 +3,25 @@ const router = express.Router();
 const { connection } = require('./index'); // DB 연결 설정
 const { checkAuthenticated } = require('./auth'); // 인증 미들웨어
 
-// 댓글 목록 조회 라우트 (작성자의 정보 포함)
+// 모든 댓글 조회 라우트 (작성자의 정보 포함)
+router.get('/', checkAuthenticated, (req, res) => {
+  const getAllCommentsQuery = `
+    SELECT Comment.*, User.username, User.MBTI_FK 
+    FROM Comment 
+    JOIN User ON Comment.user_id = User.userid
+  `;
+
+  connection.query(getAllCommentsQuery, (err, results) => {
+    if (err) {
+      console.error('Error fetching comments:', err);
+      res.status(500).json({ error: 'An error occurred' });
+    } else {
+      res.json(results); // JSON 형식으로 모든 댓글 반환
+    }
+  });
+});
+
+// 특정 게시물의 댓글 목록 조회 라우트 (작성자의 정보 포함)
 router.get('/:board_id', checkAuthenticated, (req, res) => {
   const boardId = req.params.board_id; // URL에서 게시물 ID 가져오기
 
