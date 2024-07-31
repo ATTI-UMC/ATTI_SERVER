@@ -93,19 +93,10 @@ paths:
           description: Internal server error
       security:
         - sessionAuth: []
-components:
-  securitySchemes:
-    sessionAuth:
-      type: apiKey
-      in: cookie
-      name: connect.sid # express-session의 기본 쿠키 이름
-security:
-  - sessionAuth: []
-
-    /notifications/{user_id}:
+  /notifications/{user_id}:
     get:
       summary: Get notifications
-      description: all notifications for the authenticated user
+      description: All notifications for the authenticated user
       parameters:
         - in: path
           name: user_id
@@ -140,9 +131,8 @@ security:
       security:
         - sessionAuth: []
     post:
-      summary: Create a nw notification
+      summary: Create a new notification
       description: Creates a new notification for a user
-      
       requestBody:
         required: true
         content:
@@ -166,7 +156,6 @@ security:
           description: Internal server error
       security:
         - sessionAuth: []
-  
 components:
   securitySchemes:
     sessionAuth:
@@ -175,4 +164,3 @@ components:
       name: connect.sid # express-session의 기본 쿠키 이름
 security:
   - sessionAuth: []
-
