@@ -1,0 +1,144 @@
+openapi: 3.0.0
+info:
+  title: Group Chat API
+  version: 1.0.0
+  description: API for managing group chats and messages
+
+paths:
+  /groupchat:
+    post:
+      summary: Create a new group chat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                content:
+                  type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  groupChatRoomId:
+                    type: integer
+        '500':
+          description: Internal Server Error
+    
+    get:
+      summary: Get all group chats
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GroupChat'
+        '500':
+          description: Internal Server Error
+
+  /groupchat/{id}:
+    get:
+      summary: Get a group chat by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupChat'
+        '404':
+          description: Group chat not found
+        '500':
+          description: Internal Server Error
+
+  /groupchat/message:
+    post:
+      summary: Add a message to a group chat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                groupChatRoomId:
+                  type: integer
+                userId:
+                  type: integer
+                content:
+                  type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messageId:
+                    type: integer
+        '500':
+          description: Internal Server Error
+
+  /groupchat/{groupChatRoomId}/messages:
+    get:
+      summary: Get messages for a group chat
+      parameters:
+        - in: path
+          name: groupChatRoomId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        '500':
+          description: Internal Server Error
+
+components:
+  schemas:
+    GroupChat:
+      type: object
+      properties:
+        group_chatroom_id:
+          type: integer
+        user_id:
+          type: integer
+        content:
+          type: string
+    Message:
+      type: object
+      properties:
+        message_id:
+          type: integer
+        group_chatroom_id:
+          type: integer
+        user_id:
+          type: integer
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time

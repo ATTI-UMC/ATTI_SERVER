@@ -37,10 +37,12 @@ function configurePassport() {
             if (err) {
               return done(err);
             }
-            const maxUserid = results[0].maxUserid || 0;
+              // maxUserid가 숫자인지 확인하고, 숫자가 아니면 기본값으로 0을 사용
+            const maxUserid = parseInt(results[0].maxUserid, 10) || 0;
             const newUserid = maxUserid + 1;
 
-            const nickname = profile.displayName ? profile.displayName.slice(0, 5) : 'guest';
+
+            const nickname = profile.displayName;
             const defaultMBTI = 'IIII'; // 기본 MBTI 값
             const insertQuery = 'INSERT INTO User (userid, id, nickname, name, MBTI_FK) VALUES (?, ?, ?, ?, ?)';
             connection.query(insertQuery, [newUserid, profile.id, nickname, profile.displayName, defaultMBTI], (err) => {

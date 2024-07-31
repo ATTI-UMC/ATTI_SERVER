@@ -1,45 +1,33 @@
-const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const yaml = require('yamljs');
 const path = require('path');
 
-const swaggerSpec = swaggerJsDoc({
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'ATTI API',
-      version: '1.0.0',
-      description: 'ATTI API Documentation',
-    },
-    servers: [
-      {
-        url: process.env.API_URL || 'http://localhost:3000',
-        description: 'API Server',
-      },
-    ],
-    components: {
-      securitySchemes: {
-        cookieAuth: {
-          type: 'apiKey',
-          in: 'cookie',
-          name: 'connect.sid' // Express 세션 쿠키 이름
-        }
-      }
-    },
-    security: [
-      {
-        cookieAuth: []
-      },
-    ],
-  },
-  apis: [
-    path.join(__dirname, '../routes/*.js'),
-    path.join(__dirname, '../models/*.js'),
-  ],
-});
+const userSwaggerPath = path.join(__dirname, 'user_swagger.yaml');
+const groupChatSwaggerPath = path.join(__dirname, 'group_chat_swagger.yaml');
 
-console.log('Swagger spec:', JSON.stringify(swaggerSpec, null, 2));
+const userSwaggerSpec = yaml.load(userSwaggerPath);
+const groupChatSwaggerSpec = yaml.load(groupChatSwaggerPath);
+
+const combinedSpec = {
+  openapi: '3.0.0',
+  info: {
+    title: 'Combined API',
+    version: '1.0.0',
+    description: 'Combined User and Group Chat API'
+  },
+  paths: {
+    ...userSwaggerSpec.paths,
+    ...groupChatSwaggerSpec.paths
+  },
+  components: {
+    schemas: {
+      ...userSwaggerSpec.components?.schemas,
+      ...groupChatSwaggerSpec.components?.schemas
+    }
+  }
+};
 
 module.exports = {
   swaggerUi,
-  swaggerSpec,
+  swaggerSpec: combinedSpec
 };
