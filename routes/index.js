@@ -134,4 +134,7 @@ router.get('/notifications/:user_id', (req, res) => {
     }
     else{
     res.status(200).json(results);
+    }
+  });
+});
 module.exports = router;
