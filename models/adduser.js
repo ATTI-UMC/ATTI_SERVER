@@ -16,6 +16,7 @@ async function addUserInfo(userId, userInfo) {
   try {
     const [rows] = await PromiseConnection.query(
       `UPDATE User SET
+         nickname=?
          age = ?, 
          school = ?, 
          department = ?, 
@@ -24,6 +25,7 @@ async function addUserInfo(userId, userInfo) {
          student_id = ?
        WHERE id = ?`,
       [
+        userInfo.nickname || null,
         userInfo.age || null,
         userInfo.school || null,
         userInfo.department || null,
