@@ -25,6 +25,14 @@ class GroupChatService {
     const messages = await groupChatDao.getMessages(groupChatRoomId);
     return messages;
   }
+  
+  async deleteMessage(messageId) {
+    await groupChatDao.deleteMessage(messageId);
+  }
+
+  async deleteGroupChat(id) {
+    await groupChatDao.deleteGroupChat(id);
+  }
 }
 
 module.exports = new GroupChatService();

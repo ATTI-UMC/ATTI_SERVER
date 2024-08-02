@@ -17,6 +17,7 @@ router.get('/mbti', (req, res) => {
   }
 
   const user = req.session.passport.user;
+  
   const query = 'SELECT MBTI_FK FROM User WHERE userid = ?';
   connection.query(query, [user], (err, results) => {
     if (err) {

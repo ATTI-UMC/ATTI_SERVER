@@ -1,7 +1,7 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const mysql = require('mysql');
-
+//로그인 관련 설정 Config
 // MySQL 연결 설정
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,

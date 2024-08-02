@@ -53,6 +53,27 @@ class GroupChatController {
       res.status(500).json({ message: error.message });
     }
   }
+  async deleteMessage(req, res) {
+    try {
+      const { messageId } = req.params;
+      await groupChatService.deleteMessage(messageId);
+      res.status(200).json({ message: 'Message deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  async deleteGroupChat(req, res) {
+    try {
+      const { id } = req.params;
+      await groupChatService.deleteGroupChat(id);
+      res.status(200).json({ message: 'Group chat deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+
 }
 
 module.exports = new GroupChatController();

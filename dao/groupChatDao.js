@@ -34,6 +34,14 @@ class GroupChatDao {
       );
       return rows;
     }
+    async deleteMessage(messageId) {
+      await db.execute('DELETE FROM GroupChatMessage WHERE message_id = ?', [messageId]);
+    }
+  
+    async deleteGroupChat(id) {
+      await db.execute('DELETE FROM GroupChatMessage WHERE group_chatroom_id = ?', [id]);
+      await db.execute('DELETE FROM GroupChatRoom WHERE group_chatroom_id = ?', [id]);
+    }
   }
   
   module.exports = new GroupChatDao();
