@@ -54,7 +54,6 @@ app.use('/groupchat', groupChatRouter);
 app.get('/oauth/google',
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
-    console.log('User after authentication:', req.user);
     res.redirect('/profile');
   }
 );

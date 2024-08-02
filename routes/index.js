@@ -77,6 +77,7 @@ router.get('/profile', (req, res) => {
     `);
   }
 });
+// ->  json으로 바꿔야 함.
 
 router.post('/profile/complete', async (req, res) => {
   if (!req.isAuthenticated()) {

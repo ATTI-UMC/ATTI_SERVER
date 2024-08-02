@@ -8,6 +8,8 @@ paths:
   /groupchat:
     post:
       summary: Create a new group chat
+      tags:
+        - Group Chat
       requestBody:
         required: true
         content:
@@ -34,6 +36,8 @@ paths:
     
     get:
       summary: Get all group chats
+      tags:
+        - Group Chat
       responses:
         '200':
           description: Successful response
@@ -49,6 +53,8 @@ paths:
   /groupchat/{id}:
     get:
       summary: Get a group chat by ID
+      tags:
+        - Group Chat
       parameters:
         - in: path
           name: id
@@ -66,10 +72,38 @@ paths:
           description: Group chat not found
         '500':
           description: Internal Server Error
+    
+    delete:
+      summary: Delete a group chat
+      tags:
+        - Group Chat
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Group chat deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Group chat deleted successfully
+        '404':
+          description: Group chat not found
+        '500':
+          description: Internal Server Error
 
   /groupchat/message:
     post:
       summary: Add a message to a group chat
+      tags:
+        - Group Chat
       requestBody:
         required: true
         content:
@@ -99,6 +133,8 @@ paths:
   /groupchat/{groupChatRoomId}/messages:
     get:
       summary: Get messages for a group chat
+      tags:
+        - Group Chat
       parameters:
         - in: path
           name: groupChatRoomId
@@ -114,6 +150,33 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Message'
+        '500':
+          description: Internal Server Error
+
+  /groupchat/message/{messageId}:
+    delete:
+      summary: Delete a message
+      tags:
+        - Group Chat
+      parameters:
+        - in: path
+          name: messageId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Message deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Message deleted successfully
+        '404':
+          description: Message not found
         '500':
           description: Internal Server Error
 
