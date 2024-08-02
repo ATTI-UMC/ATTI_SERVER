@@ -8,6 +8,8 @@ paths:
   /groupchat:
     post:
       summary: Create a new group chat
+      tags:
+        - Group Chat
       requestBody:
         required: true
         content:
@@ -34,6 +36,8 @@ paths:
     
     get:
       summary: Get all group chats
+      tags:
+        - Group Chat
       responses:
         '200':
           description: Successful response
@@ -49,6 +53,8 @@ paths:
   /groupchat/{id}:
     get:
       summary: Get a group chat by ID
+      tags:
+        - Group Chat
       parameters:
         - in: path
           name: id
@@ -70,6 +76,8 @@ paths:
   /groupchat/message:
     post:
       summary: Add a message to a group chat
+      tags:
+        - Group Chat
       requestBody:
         required: true
         content:
@@ -99,6 +107,8 @@ paths:
   /groupchat/{groupChatRoomId}/messages:
     get:
       summary: Get messages for a group chat
+      tags:
+        - Group Chat
       parameters:
         - in: path
           name: groupChatRoomId
