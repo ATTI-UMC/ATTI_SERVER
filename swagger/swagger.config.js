@@ -4,9 +4,11 @@ const path = require('path');
 
 const userSwaggerPath = path.join(__dirname, 'user_swagger.yaml');
 const groupChatSwaggerPath = path.join(__dirname, 'group_chat_swagger.yaml');
+const joinSwaggerPath = path.join(__dirname, 'join_swagger.yaml');
 
 const userSwaggerSpec = yaml.load(userSwaggerPath);
 const groupChatSwaggerSpec = yaml.load(groupChatSwaggerPath);
+const joinSwaggerSpec = yaml.load(joinSwaggerPath);
 
 const combinedSpec = {
   openapi: '3.0.0',
@@ -17,12 +19,14 @@ const combinedSpec = {
   },
   paths: {
     ...userSwaggerSpec.paths,
-    ...groupChatSwaggerSpec.paths
+    ...groupChatSwaggerSpec.paths,
+    ...joinSwaggerSpec.paths
   },
   components: {
     schemas: {
       ...userSwaggerSpec.components?.schemas,
-      ...groupChatSwaggerSpec.components?.schemas
+      ...groupChatSwaggerSpec.components?.schemas,
+      ...joinSwaggerSpec.components?.schemas
     }
   }
 };

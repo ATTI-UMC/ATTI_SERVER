@@ -1,0 +1,82 @@
+vopenapi: 3.0.0
+info:
+  title: 회원가입 API
+  description: API for email verification during join process
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /join/sendemail:
+    post:
+      summary: Send verification code to email
+      tags:
+        - Join
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: Verification code sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Verification code sent to your email
+        '400':
+          description: Invalid email
+        '500':
+          description: Server error
+
+  /join/verify:
+    post:
+      summary: Verify the email verification code
+      tags:
+        - Join
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                code:
+                  type: string
+                  minLength: 6
+                  maxLength: 6
+      responses:
+        '200':
+          description: Email verified successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  verified:
+                    type: boolean
+                  message:
+                    type: string
+        '400':
+          description: Invalid email or code
+        '500':
+          description: Server error
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string

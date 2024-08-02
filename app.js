@@ -14,6 +14,7 @@ const { swaggerUi, swaggerSpec } = require('./swagger/swagger.config');
 const configurePassport = require('./config/passport');
 const bodyParser = require('body-parser');
 const groupChatRouter = require('./routes/groupChat');
+const joinRouter = require('./routes/join');
 
 
 const app = express();
@@ -49,7 +50,7 @@ app.use('/auth', authRouter);
 app.use('/ocr', ocrRouter);
 app.use('/user', userRouter);
 app.use('/groupchat', groupChatRouter);
-
+app.use('/join',joinRouter);
 
 app.get('/oauth/google',
   passport.authenticate('google', { failureRedirect: '/' }),
