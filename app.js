@@ -15,7 +15,8 @@ const configurePassport = require('./config/passport');
 const bodyParser = require('body-parser');
 const groupChatRouter = require('./routes/groupChat');
 const joinRouter = require('./routes/join');
-
+const blockRouter= require ('./routes/block');
+const notificationRouter=require ('./routes/notifications');
 
 const app = express();
 
@@ -51,6 +52,9 @@ app.use('/ocr', ocrRouter);
 app.use('/user', userRouter);
 app.use('/groupchat', groupChatRouter);
 app.use('/join',joinRouter);
+app.use('/block',blockRouter);
+app.use('/notifications',notificationRouter);
+
 
 app.get('/oauth/google',
   passport.authenticate('google', { failureRedirect: '/' }),
