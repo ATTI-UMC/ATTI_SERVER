@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { connection } = require('./index'); // DB 연결 설정
-const { checkAuthenticated } = require('./auth'); // 인증 미들웨어
+const { connection } = require('./index');
+const { checkAuthenticated } = require('./auth'); // checkAuthenticated를 개별적으로 불러오기
 
 // 모든 댓글 조회 라우트 (작성자의 정보 포함)
 router.get('/', checkAuthenticated, (req, res) => {
