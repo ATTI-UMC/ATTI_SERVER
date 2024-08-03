@@ -1,0 +1,77 @@
+openapi: 3.0.0
+info:
+  title: 차단 API
+  description: API for block user
+  version: 1.0.0
+
+paths:
+  /block:
+    post:
+      summary: Block user
+      tags:
+        - Block
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - block_id
+              properties:
+                user_id:
+                  type: string
+                block_id:
+                  type: string
+      responses:
+        '200':
+          description: User blocked successfully
+        '500':
+          description: Internal Server Error
+    delete:
+      summary: Unblock user
+      tags:
+        - Block
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - block_id
+              properties:
+                user_id:
+                  type: string
+                block_id:
+                  type: string
+      responses:
+        '200':
+          description: User unblocked successfully
+        '500':
+          description: Internal Server Error
+  /block/{user_id}:       
+    get:
+      summary: Get blocked users
+      tags:
+        - Block
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Blocked users retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    block_id:
+                      type: string
+        '500':
+          description: Internal Server Error

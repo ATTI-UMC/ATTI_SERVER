@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
@@ -12,6 +13,11 @@ const crypto = require('crypto');
 const path = require('path');
 const { swaggerUi, swaggerSpec } = require('./swagger/swagger.config');
 const configurePassport = require('./config/passport');
+const bodyParser = require('body-parser');
+const groupChatRouter = require('./routes/groupChat');
+const joinRouter = require('./routes/join');
+const blockRouter= require ('./routes/block');
+const notificationRouter=require ('./routes/notifications');
 
 const app = express();
 
@@ -36,8 +42,9 @@ configurePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Swagger 설정
+//스웨거
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/', indexRouter);
@@ -45,11 +52,15 @@ app.use('/auth', authRouter);
 app.use('/ocr', ocrRouter);
 app.use('/user', userRouter);
 app.use('/board', boardRouter);
+app.use('/groupchat', groupChatRouter);
+app.use('/join',joinRouter);
+app.use('/block',blockRouter);
+app.use('/notifications',notificationRouter);
+
 
 app.get('/oauth/google',
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
-    console.log('User after authentication:', req.user);
     res.redirect('/profile');
   }
 );

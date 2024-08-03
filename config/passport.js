@@ -1,7 +1,7 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const mysql = require('mysql');
-
+//로그인 관련 설정 Config
 // MySQL 연결 설정
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -37,8 +37,10 @@ function configurePassport() {
             if (err) {
               return done(err);
             }
-            const maxUserid = results[0].maxUserid || 0;
+              // maxUserid가 숫자인지 확인하고, 숫자가 아니면 기본값으로 0을 사용
+            const maxUserid = parseInt(results[0].maxUserid, 10) || 0;
             const newUserid = maxUserid + 1;
+
 
             const nickname = profile.displayName;
             const defaultMBTI = 'IIII'; // 기본 MBTI 값

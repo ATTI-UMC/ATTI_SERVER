@@ -17,6 +17,7 @@ router.get('/mbti', (req, res) => {
   }
 
   const user = req.session.passport.user;
+  
   const query = 'SELECT MBTI_FK FROM User WHERE userid = ?';
   connection.query(query, [user], (err, results) => {
     if (err) {
@@ -29,21 +30,6 @@ router.get('/mbti', (req, res) => {
   });
 });
 
-/*
-router.get('/mbti', (req, res) => {
-  if (!req.session || !req.session.passport || !req.session.passport.user) {
-    return res.status(401).send('Unauthorized');
-  }
-
-  res.send(`
-    <form action="/user/mbti" method="POST">
-      <label for="mbti">Enter your MBTI:</label>
-      <input type="text" id="mbti" name="mbti" required>
-      <button type="submit">Submit</button>
-    </form>
-  `);
-}); //이거 json으로 바꿔야 하고
-*/
 
 router.post('/mbti', (req, res) => {
   if (!req.session || !req.session.passport || !req.session.passport.user) {

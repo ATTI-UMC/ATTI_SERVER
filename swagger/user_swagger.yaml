@@ -93,11 +93,3 @@ paths:
           description: Internal server error
       security:
         - sessionAuth: []
-components:
-  securitySchemes:
-    sessionAuth:
-      type: apiKey
-      in: cookie
-      name: connect.sid # express-session의 기본 쿠키 이름
-security:
-  - sessionAuth: []
