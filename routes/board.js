@@ -20,6 +20,35 @@ connection.connect((err) => {
   console.log('Connected to MySQL as id ' + connection.threadId);
 });
 
+/**
+ * @swagger
+ * /board:
+ *   get:
+ *     summary: Retrieve all posts
+ *     description: Retrieve a list of all posts from the board.
+ *     responses:
+ *       200:
+ *         description: A list of posts.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   board_id:
+ *                     type: integer
+ *                     description: The post ID.
+ *                   user_id:
+ *                     type: integer
+ *                     description: The ID of the user who created the post.
+ *                   content:
+ *                     type: string
+ *                     description: The content of the post.
+ *                   likes:
+ *                     type: integer
+ *                     description: The number of likes the post has.
+ */
 
 //모든 게시글 조회 라우터
 router.get('/', (req, res) => {
@@ -70,6 +99,45 @@ router.get('/:id', (req, res) => {
     res.json(results[0]);
   });
 });
+/**
+ * @swagger
+ * /board/{id}:
+ *   get:
+ *     summary: Retrieve a specific post
+ *     description: Retrieve a specific post by ID from the board.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the post to retrieve.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: A post object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 board_id:
+ *                   type: integer
+ *                   description: The post ID.
+ *                 user_id:
+ *                   type: integer
+ *                   description: The ID of the user who created the post.
+ *                 content:
+ *                   type: string
+ *                   description: The content of the post.
+ *                 likes:
+ *                   type: integer
+ *                   description: The number of likes the post has.
+ *                 username:
+ *                   type: string
+ *                   description: The username of the user who created the post.
+ *       404:
+ *         description: Post not found.
+ */
 
 // 게시글 수정 라우터
 router.put('/:id', (req, res) => {
@@ -93,6 +161,38 @@ router.put('/:id', (req, res) => {
   });
 });
 
+/**
+ * @swagger
+ * /board/{id}:
+ *   put:
+ *     summary: Update a specific post
+ *     description: Update the content and likes of a specific post by ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the post to update.
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       description: The new content and likes for the post.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               content:
+ *                 type: string
+ *               likes:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Post successfully updated.
+ *       404:
+ *         description: Post not found.
+ */
+
 // 게시글 삭제 라우터
 router.delete('/:id', (req, res) => {
   const postId = req.params.id;
@@ -113,5 +213,25 @@ router.delete('/:id', (req, res) => {
     res.status(200).send('게시글이 성공적으로 삭제되었습니다.');
   });
 });
+
+/**
+ * @swagger
+ * /board/{id}:
+ *   delete:
+ *     summary: Delete a specific post
+ *     description: Delete a specific post by ID from the board.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the post to delete.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Post successfully deleted.
+ *       404:
+ *         description: Post not found.
+ */
 
 module.exports = router;
