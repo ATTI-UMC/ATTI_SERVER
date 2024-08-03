@@ -27,6 +27,7 @@ const combinedSpec = {
     ...joinSwaggerSpec.paths,
     ...blockSwaggerSpec.paths,
     ...notificationSwaggerSpec.paths
+    ...joinSwaggerSpec.paths
   },
   components: {
     schemas: {
@@ -35,6 +36,7 @@ const combinedSpec = {
       ...joinSwaggerSpec.components?.schemas,
       ...blockSwaggerSpec.components?.schemas,
       ...notificationSwaggerSpec.components?.schemas
+      ...joinSwaggerSpec.components?.schemas
     }
   }
 };

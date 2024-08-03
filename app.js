@@ -55,6 +55,7 @@ app.use('/join',joinRouter);
 app.use('/block',blockRouter);
 app.use('/notifications',notificationRouter);
 
+
 app.get('/oauth/google',
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {

@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Group Chat API
+  title: 그룹채팅 API
   version: 1.0.0
   description: API for managing group chats and messages
 
