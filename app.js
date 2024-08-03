@@ -18,12 +18,12 @@ const bodyParser = require('body-parser');
 const groupChatRouter = require('./routes/groupChat');
 const joinRouter = require('./routes/join');
 const blockRouter= require ('./routes/block');
-const notificationRouter=require ('./routes/notification');
+const notificationRouter=require ('./routes/notifications');
 const flash = require('connect-flash'); //flahg-알림 기능
 const commentRouter = require('./routes/comments'); // 댓글 라우터 추가
 const commentActionsRouter = require('./routes/commentActions'); // 댓글 수정 및 삭제 라우터 추가
 const commentLikesRouter = require('./routes/commentLikes'); // 좋아요 기능 라우터 추가
-
+const chatRouter = require('./routes/chat'); // 개인채팅
 const app = express();
 
 app.use(flash()); // 플래시 메시지 미들웨어 추가
@@ -65,7 +65,7 @@ app.use('/groupchat', groupChatRouter);
 app.use('/join',joinRouter);
 app.use('/block',blockRouter);
 app.use('/notifications',notificationRouter);
-
+app.use('/chat', chatRouter);
 
 app.get('/oauth/google',
   passport.authenticate('google', { failureRedirect: '/' }),
