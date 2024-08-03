@@ -10,8 +10,6 @@ paths:
     get:
       summary: Home page
       description: Displays a login link
-      tags: 
-        - User
       responses:
         '200':
           description: HTML content with login link
@@ -23,8 +21,6 @@ paths:
     get:
       summary: User profile page
       description: Displays user profile or MBTI input form
-      tags: 
-        - User
       responses:
         '200':
           description: HTML content with user profile or MBTI form
@@ -40,8 +36,6 @@ paths:
     post:
       summary: Update user MBTI
       description: Updates the user's MBTI value
-      tags: 
-        - User
       requestBody:
         required: true
         content:
@@ -64,8 +58,6 @@ paths:
     get:
       summary: Logout
       description: Logs out the current user
-      tags: 
-        - User
       responses:
         '302':
           description: Redirect to home page
@@ -75,8 +67,6 @@ paths:
     get:
       summary: Get user information
       description: Retrieves user information by ID
-      tags: 
-        - User
       parameters:
         - in: path
           name: id
@@ -103,78 +93,3 @@ paths:
           description: Internal server error
       security:
         - sessionAuth: []
-  /notifications/{user_id}:
-    get:
-      summary: Get notifications
-      description: All notifications for the authenticated user
-      tags: 
-        - Notifications
-      parameters:
-        - in: path
-          name: user_id
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: A list of notifications
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    notification_id:
-                      type: integer
-                    user_id:
-                      type: string
-                    message:
-                      type: string
-                    status:
-                      type: string
-                    created_at:
-                      type: string
-                      format: date-time
-        '401':
-          description: Unauthorized
-        '500':
-          description: Internal server error
-      security:
-        - sessionAuth: []
-    post:
-      summary: Create a new notification
-      description: Creates a new notification for a user
-      tags: 
-        - Notifications
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                user_id:
-                  type: string
-                message:
-                  type: string
-              required:
-                - user_id
-                - message
-      responses:
-        '201':
-          description: Notification created
-        '400':
-          description: Invalid input
-        '500':
-          description: Internal server error
-      security:
-        - sessionAuth: []
-components:
-  securitySchemes:
-    sessionAuth:
-      type: apiKey
-      in: cookie
-      name: connect.sid # express-session의 기본 쿠키 이름
-security:
-  - sessionAuth: []
