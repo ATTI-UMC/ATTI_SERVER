@@ -13,6 +13,9 @@
   "dependencies": {
     "body-parser": "^1.20.2",
     "connect-flash": "^0.1.1",
+    "body": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -23,6 +26,7 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.10.3",
     "nodemailer": "^6.9.14",
+    "parser": "^0.1.4",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-kakao": "^1.0.1",
