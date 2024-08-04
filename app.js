@@ -1,13 +1,14 @@
 require('dotenv').config();
-
 const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
+
 const indexRouter = require('./routes/index');
-const authRouter = require('./routes/auth');
+const authRouter = require('./routes/auth'); 
+
 const ocrRouter = require('./routes/ocr');
 const userRouter = require('./routes/user');
-const boardRouter = require('./routes/board');
+
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const path = require('path');
@@ -18,9 +19,15 @@ const groupChatRouter = require('./routes/groupChat');
 const joinRouter = require('./routes/join');
 const blockRouter= require ('./routes/block');
 const notificationRouter=require ('./routes/notifications');
-
+const flash = require('connect-flash'); 
+const commentRouter = require('./routes/comments'); 
+const commentActionsRouter = require('./routes/commentActions'); 
+const commentLikesRouter = require('./routes/commentLikes'); 
+const chatRouter = require('./routes/chat'); 
 const app = express();
+const boardRouter = require('./routes/board');
 
+app.use(flash()); 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -56,7 +63,11 @@ app.use('/groupchat', groupChatRouter);
 app.use('/join',joinRouter);
 app.use('/block',blockRouter);
 app.use('/notifications',notificationRouter);
+app.use('/chat', chatRouter);
 
+app.use('/comments', commentRouter); 
+app.use('/commentActions', commentActionsRouter); 
+app.use('/commentLikes', commentLikesRouter); 
 
 app.get('/oauth/google',
   passport.authenticate('google', { failureRedirect: '/' }),
@@ -73,3 +84,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+module.exports = app;

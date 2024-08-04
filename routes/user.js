@@ -10,7 +10,6 @@ const connection = mysql.createConnection({
   database: process.env.DB_NAME
 });
 
-
 router.get('/mbti', (req, res) => {
   if (!req.session || !req.session.passport || !req.session.passport.user) {
     return res.status(401).send('Unauthorized');

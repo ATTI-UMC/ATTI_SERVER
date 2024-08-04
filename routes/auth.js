@@ -35,4 +35,13 @@ router.get('/google/callback',
   }
 );
 
+// 인증된 사용자인지 확인하는 미들웨어  
+const checkAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/');
+};
+
 module.exports = router;
+module.exports.checkAuthenticated = checkAuthenticated;
