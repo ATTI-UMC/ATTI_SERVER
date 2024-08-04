@@ -49,4 +49,19 @@ router.post('/', (req, res) => {
     });
   });
 
+// 알림 삭제 API
+router.delete('/', (req, res) => {
+  const { user_id, notification_id } = req.body;
+  const query = 'DELETE FROM Notification WHERE user_id = ? AND notification_id = ?';
+  connection.query(query, [user_id, notification_id], (err, result) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else if (result.affectedRows === 0) {
+      res.status(404).json({ error: 'Notification not found' });
+    } else {
+      res.status(200).json({ message: 'Notification deleted successfully' });
+    }
+  });
+});
+
   module.exports = router;

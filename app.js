@@ -4,11 +4,11 @@ const session = require('express-session');
 const passport = require('passport');
 
 const indexRouter = require('./routes/index');
-const authRouter = require('./routes/auth'); // auth 라우터 가져오기
+const authRouter = require('./routes/auth'); 
 
-const boardRouter = require('./routes/board'); //게시물
 const ocrRouter = require('./routes/ocr');
 const userRouter = require('./routes/user');
+
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const path = require('path');
@@ -19,14 +19,15 @@ const groupChatRouter = require('./routes/groupChat');
 const joinRouter = require('./routes/join');
 const blockRouter= require ('./routes/block');
 const notificationRouter=require ('./routes/notifications');
-const flash = require('connect-flash'); //flahg-알림 기능
-const commentRouter = require('./routes/comments'); // 댓글 라우터 추가
-const commentActionsRouter = require('./routes/commentActions'); // 댓글 수정 및 삭제 라우터 추가
-const commentLikesRouter = require('./routes/commentLikes'); // 좋아요 기능 라우터 추가
-const chatRouter = require('./routes/chat'); // 개인채팅
+const flash = require('connect-flash'); 
+const commentRouter = require('./routes/comments'); 
+const commentActionsRouter = require('./routes/commentActions'); 
+const commentLikesRouter = require('./routes/commentLikes'); 
+const chatRouter = require('./routes/chat'); 
 const app = express();
+const boardRouter = require('./routes/board');
 
-app.use(flash()); // 플래시 메시지 미들웨어 추가
+app.use(flash()); 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -57,15 +58,16 @@ app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/ocr', ocrRouter);
 app.use('/user', userRouter);
-app.use('/comments', commentRouter); // 댓글 라우터 추가
-app.use('/commentActions', commentActionsRouter); // 댓글 수정 및 삭제 라우터 추가
-app.use('/commentLikes', commentLikesRouter); // 좋아요 기능 라우터 추가
-app.use('/board', boardRouter); // 게시물 라우터 추가
+app.use('/board', boardRouter);
 app.use('/groupchat', groupChatRouter);
 app.use('/join',joinRouter);
 app.use('/block',blockRouter);
 app.use('/notifications',notificationRouter);
 app.use('/chat', chatRouter);
+
+app.use('/comments', commentRouter); 
+app.use('/commentActions', commentActionsRouter); 
+app.use('/commentLikes', commentLikesRouter); 
 
 app.get('/oauth/google',
   passport.authenticate('google', { failureRedirect: '/' }),
