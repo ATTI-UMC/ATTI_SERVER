@@ -74,6 +74,58 @@ paths:
           description: Internal server error
       security:
         - sessionAuth: []
+    delete:
+      summary: Delete a notification
+      description: Deletes a specific notification by its ID and user ID
+      tags: 
+        - Notifications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                notification_id:
+                  type: string
+              required:
+                - user_id
+                - notification_id
+      responses:
+        '200':
+          description: Notification deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Notification deleted successfully
+        '404':
+          description: Notification not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Notification not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - sessionAuth: []
 components:
   securitySchemes:
     sessionAuth:
