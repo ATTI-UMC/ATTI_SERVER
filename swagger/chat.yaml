@@ -1,0 +1,250 @@
+openapi: 3.0.0
+info:
+  title: Personal Chat API
+  version: 1.0.0
+  description: API Documentation for Personal Chat
+servers:
+  - url: http://localhost:3000
+    description: API Server
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: connect.sid
+  schemas:
+    ChatRoom:
+      type: object
+      properties:
+        chatroomId:
+          type: integer
+          description: The ID of the chat room
+        userId:
+          type: string
+          description: The ID of the user
+        content:
+          type: string
+          description: The content of the chat
+        is_read:
+          type: boolean
+          description: Read status of the chat
+    Message:
+      type: object
+      properties:
+        messageId:
+          type: integer
+          description: The ID of the message
+        chatroomId:
+          type: integer
+          description: The ID of the chat room
+        userId:
+          type: string
+          description: The ID of the user
+        content:
+          type: string
+          description: The content of the message
+        timestamp:
+          type: string
+          format: date-time
+          description: The timestamp of the message
+security:
+  - cookieAuth: []
+paths:
+  /chat/create:
+    post:
+      summary: Create a new chat room
+      tags:
+        - Chat
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: The ID of the user creating the chat room
+                content:
+                  type: string
+                  description: Initial content of the chat
+      responses:
+        '200':
+          description: Chat room created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chatroomId:
+                    type: integer
+                    description: The ID of the created chat room
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+  /chat/{chatroomId}/messages:
+    get:
+      summary: Get messages of a chat room
+      tags:
+        - Chat
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: chatroomId
+          schema:
+            type: integer
+          required: true
+          description: The ID of the chat room
+      responses:
+        '200':
+          description: Messages retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        '404':
+          description: Chat room not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+  /chat/{chatroomId}/messages:
+    post:
+      summary: Send a message in a chat room
+      tags:
+        - Chat
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: chatroomId
+          schema:
+            type: integer
+          required: true
+          description: The ID of the chat room
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: The ID of the user sending the message
+                content:
+                  type: string
+                  description: The content of the message
+      responses:
+        '200':
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messageId:
+                    type: integer
+                    description: The ID of the created message
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+  /chat/{chatroomId}:
+    delete:
+      summary: Delete a chat room
+      tags:
+        - Chat
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: chatroomId
+          schema:
+            type: integer
+          required: true
+          description: The ID of the chat room to be deleted
+      responses:
+        '200':
+          description: Chat room deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+        '404':
+          description: Chat room not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+  /chat/{chatroomId}/messages/{messageId}:
+    delete:
+      summary: Delete a message
+      tags:
+        - Chat
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: chatroomId
+          schema:
+            type: integer
+          required: true
+          description: The ID of the chat room
+        - in: path
+          name: messageId
+          schema:
+            type: integer
+          required: true
+          description: The ID of the message to be deleted
+      responses:
+        '200':
+          description: Message deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+        '404':
+          description: Message not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message

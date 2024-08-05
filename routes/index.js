@@ -18,9 +18,11 @@ connection.connect((err) => {
   }
   console.log('Connected to MySQL as id ' + connection.threadId);
 });
-
 router.get('/', (req, res) => {
-  res.send('<a href="/auth/google">Login with Google</a>');
+  res.send(`
+    <a href="/auth/google">Login with Google</a><br>
+    <a href="/auth/naver">Login with Naver</a>
+  `);
 });
 
 router.get('/profile', (req, res) => {
