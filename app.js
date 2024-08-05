@@ -20,6 +20,7 @@ const joinRouter = require('./routes/join');
 const blockRouter= require ('./routes/block');
 const notificationRouter=require ('./routes/notifications');
 const flash = require('connect-flash'); 
+const reportRouter=require('./routes/report');
 const commentRouter = require('./routes/comments'); 
 const commentActionsRouter = require('./routes/commentActions'); 
 const commentLikesRouter = require('./routes/commentLikes'); 
@@ -64,6 +65,7 @@ app.use('/join',joinRouter);
 app.use('/block',blockRouter);
 app.use('/notifications',notificationRouter);
 app.use('/chat', chatRouter);
+app.use('/report',reportRouter);
 
 app.use('/comments', commentRouter); 
 app.use('/commentActions', commentActionsRouter); 
