@@ -8,6 +8,7 @@ const joinSwaggerPath = path.join(__dirname, 'join_swagger.yaml');
 const blockSwaggerPath = path.join(__dirname, 'block_swagger.yaml');
 const notificationSwaggerPath = path.join(__dirname, 'notifications_swagger.yaml');
 const personalChatSwaggerPath = path.join(__dirname, 'chat.yaml'); 
+const reportSwaggerPath=path.join(__dirname,'report_swagger.yaml');
 
 const userSwaggerSpec = yaml.load(userSwaggerPath);
 const groupChatSwaggerSpec = yaml.load(groupChatSwaggerPath);
@@ -15,6 +16,7 @@ const joinSwaggerSpec = yaml.load(joinSwaggerPath);
 const blockSwaggerSpec = yaml.load(blockSwaggerPath);
 const notificationSwaggerSpec = yaml.load(notificationSwaggerPath);
 const personalChatSwaggerSpec = yaml.load(personalChatSwaggerPath);
+const reportSwaggerSpec=yaml.load(reportSwaggerPath);
 
 const combinedSpec = {
   openapi: '3.0.0',
@@ -29,6 +31,7 @@ const combinedSpec = {
     ...joinSwaggerSpec.paths,
     ...blockSwaggerSpec.paths,
     ...notificationSwaggerSpec.paths,
+    ...reportSwaggerSpec.paths,
     ...personalChatSwaggerSpec.paths
   },
   components: {
@@ -38,6 +41,7 @@ const combinedSpec = {
       ...joinSwaggerSpec.components?.schemas,
       ...blockSwaggerSpec.components?.schemas,
       ...notificationSwaggerSpec.components?.schemas,
+      ...reportSwaggerSpec.components?.schemas,
       ...personalChatSwaggerSpec.components?.schemas 
     }
   }
