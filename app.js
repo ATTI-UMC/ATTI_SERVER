@@ -69,12 +69,20 @@ app.use('/comments', commentRouter);
 app.use('/commentActions', commentActionsRouter); 
 app.use('/commentLikes', commentLikesRouter); 
 
+app.get('/oauth/naver', 
+  passport.authenticate('naver', { failureRedirect: '/' }),
+  (req, res) => {
+    res.redirect('/profile');
+  }
+);
+
 app.get('/oauth/google',
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
     res.redirect('/profile');
   }
 );
+
 
 app.use((req, res, next) => {
   res.status(404).send('Not Found');
