@@ -6,7 +6,7 @@ info:
 servers:
   - url: http://localhost:3000
 paths:
-  /report:
+  /report/user:
     post:
       summary: Report a user
       description: Report a user for inappropriate behavior
@@ -22,7 +22,7 @@ paths:
                 user_id:
                   type: string
                 reported_user_id:
-                  type: string
+                  type: integer
                 reason:
                   type: string
               required:
@@ -38,7 +38,7 @@ paths:
                 type: object
                 properties:
                   report_id:
-                    type: string
+                    type: integer
                     example: "1"
                   reason:
                     type: string
@@ -78,9 +78,9 @@ paths:
               type: object
               properties:
                 user_id:
-                  type: string
+                  type: integer
                 reported_post_id:
-                  type: string
+                  type: integer
                 reason:
                   type: string
               required:
@@ -96,7 +96,7 @@ paths:
                 type: object
                 properties:
                   report_id:
-                    type: string
+                    type: integer
                     example: "1"
                   reason:
                     type: string
