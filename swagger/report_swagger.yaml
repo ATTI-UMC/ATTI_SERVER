@@ -20,7 +20,7 @@ paths:
               type: object
               properties:
                 user_id:
-                  type: string
+                  type: integer
                 reported_user_id:
                   type: integer
                 reason:
@@ -130,3 +130,4 @@ components:
       name: connect.sid # express-session의 기본 쿠키 이름
 security:
   - sessionAuth: []
+
