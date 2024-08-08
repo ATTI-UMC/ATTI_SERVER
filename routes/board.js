@@ -109,7 +109,7 @@ router.get('/:id', (req, res) => {
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
+ *         required: truende
  *         description: The ID of the post to retrieve.
  *         schema:
  *           type: integer
