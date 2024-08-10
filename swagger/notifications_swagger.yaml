@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: User API
-  description: API for user authentication, profile management, and MBTI settings
+  description: API for user notifications
   version: 1.0.0
 servers:
   - url: http://localhost:3000
@@ -17,7 +17,7 @@ paths:
           name: user_id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: A list of notifications
@@ -31,7 +31,7 @@ paths:
                     notification_id:
                       type: integer
                     user_id:
-                      type: string
+                      type: integer
                     message:
                       type: string
                     status:
@@ -59,7 +59,7 @@ paths:
               type: object
               properties:
                 user_id:
-                  type: string
+                  type: integer
                 message:
                   type: string
               required:
@@ -87,9 +87,9 @@ paths:
               type: object
               properties:
                 user_id:
-                  type: string
+                  type: integer
                 notification_id:
-                  type: string
+                  type: ingeter
               required:
                 - user_id
                 - notification_id

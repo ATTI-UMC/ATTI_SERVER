@@ -40,7 +40,7 @@ router.delete('/', (req, res) => {
     });
 });
 
-// 차단된 사용자 목록 조회
+// 차단된 사용자 목록 조회 -> ok
 router.get('/:user_id', (req, res) => {
     const {user_id} = req.params;  // 현재 로그인된 사용자
 

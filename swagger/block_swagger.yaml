@@ -20,9 +20,9 @@ paths:
                 - block_id
               properties:
                 user_id:
-                  type: string
+                  type: integer
                 block_id:
-                  type: string
+                  type: integer
       responses:
         '200':
           description: User blocked successfully
@@ -42,9 +42,9 @@ paths:
                 - block_id
               properties:
                 user_id:
-                  type: string
+                  type: integer
                 block_id:
-                  type: string
+                  type: integer
       responses:
         '200':
           description: User unblocked successfully
@@ -60,7 +60,7 @@ paths:
           name: user_id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Blocked users retrieved successfully
@@ -72,6 +72,6 @@ paths:
                   type: object
                   properties:
                     block_id:
-                      type: string
+                      type: integer
         '500':
           description: Internal Server Error

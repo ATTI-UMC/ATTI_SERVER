@@ -72,7 +72,7 @@ paths:
           name: id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Successful response
@@ -82,7 +82,7 @@ paths:
                 type: object
                 properties:
                   userid:
-                    type: string
+                    type: integer
                   name:
                     type: string
                   MBTI_FK:
