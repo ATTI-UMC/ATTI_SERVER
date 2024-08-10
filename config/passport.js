@@ -1,83 +1,85 @@
 const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const mysql = require('mysql');
-//로그인 관련 설정 Config
-// MySQL 연결 설정
-const connection = mysql.createConnection({
+const GoogleStrategy = require('passport-google-oauth20').Strategy; // 수정된 부분
+const NaverStrategy = require('passport-naver').Strategy;
+const mysql = require('mysql2');
+
+// MySQL 연결 풀 설정
+const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
-});
-
-connection.connect((err) => {
-  if (err) {
-    console.error('Error connecting to MySQL: ' + err.stack);
-    return;
-  }
-  console.log('Connected to MySQL as id ' + connection.threadId);
+  database: process.env.DB_NAME,
+  connectionLimit: 10,
 });
 
 function configurePassport() {
-  passport.use(new GoogleStrategy({
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL
-    },
-    function(accessToken, refreshToken, profile, done) {
-      const query = 'SELECT * FROM User WHERE id = ?';
-      connection.query(query, [profile.id], (err, results) => {
-        if (err) {
-          return done(err);
-        }
-        if (results.length === 0) {
-          // 사용자 정보가 없으면 새로운 userid 할당
-          const getMaxUserIdQuery = 'SELECT MAX(userid) AS maxUserid FROM User';
-          connection.query(getMaxUserIdQuery, (err, results) => {
-            if (err) {
-              return done(err);
-            }
-              // maxUserid가 숫자인지 확인하고, 숫자가 아니면 기본값으로 0을 사용
-            const maxUserid = parseInt(results[0].maxUserid, 10) || 0;
-            const newUserid = maxUserid + 1;
+  const strategyCallback = (provider) => {
+    return async (accessToken, refreshToken, profile, done) => {
+      try {
+        const [rows] = await pool.promise().query('SELECT * FROM User WHERE id = ? AND provider = ?', [profile.id, provider]);
 
+        if (rows.length === 0) {
+          // 새 사용자 생성
+          const [maxUserIdResult] = await pool.promise().query('SELECT MAX(userid) AS maxUserid FROM User');
+          const maxUserid = parseInt(maxUserIdResult[0].maxUserid, 10) || 0;
+          const newUserid = maxUserid + 1;
 
-            const nickname = profile.displayName;
-            const defaultMBTI = 'IIII'; // 기본 MBTI 값
-            const insertQuery = 'INSERT INTO User (userid, id, nickname, name, MBTI_FK) VALUES (?, ?, ?, ?, ?)';
-            connection.query(insertQuery, [newUserid, profile.id, nickname, profile.displayName, defaultMBTI], (err) => {
-              if (err) {
-                return done(err);
-              }
-              const newUser = {
-                userid: newUserid,
-                id: profile.id,
-                nickname: nickname,
-                name: profile.displayName,
-                MBTI_FK: defaultMBTI
-              };
-              return done(null, newUser);
-            });
-          });
+          let nickname;
+          if (provider === 'naver') {
+            nickname = profile._json.nickname;
+          } else {
+            nickname = profile.displayName; // Google의 경우 이름을 닉네임으로 설정
+          }
+
+          const defaultMBTI = 'IIII';
+          await pool.promise().query(
+            'INSERT INTO User (userid, id, nickname, name, MBTI_FK, provider) VALUES (?, ?, ?, ?, ?, ?)',
+            [newUserid, profile.id, nickname, profile.displayName, defaultMBTI, provider]
+          );
+
+          const newUser = {
+            userid: newUserid,
+            id: profile.id,
+            nickname: nickname,
+            name: profile.displayName,
+            MBTI_FK: defaultMBTI,
+            provider: provider,
+          };
+          return done(null, newUser);
         } else {
-          return done(null, results[0]);
+          return done(null, rows[0]);
         }
-      });
-    }
-  ));
+      } catch (error) {
+        console.error('Error in passport strategy:', error);
+        return done(error);
+      }
+    };
+  };
+
+  passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: process.env.GOOGLE_CALLBACK_URL,
+  }, strategyCallback('google')));
+
+  passport.use(new NaverStrategy({
+    clientID: process.env.NAVER_CLIENT_ID,
+    clientSecret: process.env.NAVER_CLIENT_SECRET,
+    callbackURL: process.env.NAVER_CALLBACK_URL,
+  }, strategyCallback('naver')));
 
   passport.serializeUser((user, done) => {
     done(null, user.userid);
   });
 
-  passport.deserializeUser((id, done) => {
-    const query = 'SELECT * FROM User WHERE userid = ?';
-    connection.query(query, [id], (err, results) => {
-      if (err) {
-        return done(err);
-      }
-      done(null, results[0]);
-    });
+  passport.deserializeUser(async (id, done) => {
+    try {
+      const [rows] = await pool.promise().query('SELECT * FROM User WHERE userid = ?', [id]);
+      done(null, rows[0]);
+    } catch (error) {
+      console.error('Error in deserializeUser:', error);
+      done(error);
+    }
   });
 }
 

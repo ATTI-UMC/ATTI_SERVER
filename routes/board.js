@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mysql = require('mysql');
+require('dotenv').config();
 
 // MySQL 연결 설정
 const connection = mysql.createConnection({

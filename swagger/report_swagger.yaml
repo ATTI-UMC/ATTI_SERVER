@@ -1,0 +1,132 @@
+openapi: 3.0.0
+info:
+  title: User Report API
+  description: API for reporting users and posts
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /report:
+    post:
+      summary: Report a user
+      description: Report a user for inappropriate behavior
+      tags:
+        - Reports
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                reported_user_id:
+                  type: string
+                reason:
+                  type: string
+              required:
+                - user_id
+                - reported_user_id
+                - reason
+      responses:
+        '201':
+          description: User report created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  report_id:
+                    type: string
+                    example: "1"
+                  reason:
+                    type: string
+                    example: advertisement
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid input
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+
+  /report/post:
+    post:
+      summary: Report a post
+      description: Report a post for inappropriate behavior
+      tags:
+        - Reports
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                reported_post_id:
+                  type: string
+                reason:
+                  type: string
+              required:
+                - user_id
+                - reported_post_id
+                - reason
+      responses:
+        '201':
+          description: Post report created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  report_id:
+                    type: string
+                    example: "1"
+                  reason:
+                    type: string
+                    example: advertisement
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid input
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: connect.sid # express-session의 기본 쿠키 이름
+security:
+  - sessionAuth: []
