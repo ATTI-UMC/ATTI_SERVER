@@ -1,0 +1,23 @@
+openapi: 3.0.0
+info:
+  title: MBTI Percentage Update API
+  version: 1.0.0
+  description: API for updating MBTI compatibility percentages based on chat activity
+paths:
+  /update-mbti-percentage:
+    get:
+      summary: Update MBTI percentages
+      description: Updates the MBTI compatibility percentages based on chat activity data.
+      responses:
+        '200':
+          description: Successfully updated MBTI percentages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "MBTI percentages updated successfully"
+        '500':
+          description: Internal server error

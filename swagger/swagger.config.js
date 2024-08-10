@@ -9,6 +9,7 @@ const blockSwaggerPath = path.join(__dirname, 'block_swagger.yaml');
 const notificationSwaggerPath = path.join(__dirname, 'notifications_swagger.yaml');
 const personalChatSwaggerPath = path.join(__dirname, 'chat.yaml'); 
 const reportSwaggerPath=path.join(__dirname,'report_swagger.yaml');
+const mbtiUpdateSwaggerPath = path.join(__dirname, 'mbti_update_swagger.yaml');
 
 const userSwaggerSpec = yaml.load(userSwaggerPath);
 const groupChatSwaggerSpec = yaml.load(groupChatSwaggerPath);
@@ -17,6 +18,7 @@ const blockSwaggerSpec = yaml.load(blockSwaggerPath);
 const notificationSwaggerSpec = yaml.load(notificationSwaggerPath);
 const personalChatSwaggerSpec = yaml.load(personalChatSwaggerPath);
 const reportSwaggerSpec=yaml.load(reportSwaggerPath);
+const mbtiUpdateSwaggerSpec = yaml.load(mbtiUpdateSwaggerPath);
 
 const combinedSpec = {
   openapi: '3.0.0',
@@ -32,7 +34,8 @@ const combinedSpec = {
     ...blockSwaggerSpec.paths,
     ...notificationSwaggerSpec.paths,
     ...reportSwaggerSpec.paths,
-    ...personalChatSwaggerSpec.paths
+    ...personalChatSwaggerSpec.paths,
+    ...mbtiUpdateSwaggerSpec.paths
   },
   components: {
     schemas: {
@@ -42,7 +45,8 @@ const combinedSpec = {
       ...blockSwaggerSpec.components?.schemas,
       ...notificationSwaggerSpec.components?.schemas,
       ...reportSwaggerSpec.components?.schemas,
-      ...personalChatSwaggerSpec.components?.schemas 
+      ...personalChatSwaggerSpec.components?.schemas,
+      ...mbtiUpdateSwaggerSpec.components?.schemas 
     }
   }
 };

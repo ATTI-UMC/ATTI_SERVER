@@ -28,10 +28,67 @@ const deleteMessage = async (messageId) => {
   await connection.query(query, [messageId]);
 };
 
+const updateChatLog = async (chatroomId, userId) => {
+  const logQuery = 'SELECT * FROM ChatLog WHERE chatroom_id = ?';
+  const [logs] = await connection.query(logQuery, [chatroomId]);
+
+  if (logs.length === 0) {
+    // 새로운 채팅 로그 생성
+    const insertLogQuery = `
+      INSERT INTO ChatLog (chatroom_id, user1_id, user2_id, user1_mbti, user2_mbti, message_count)
+      VALUES (?, ?, ?, (SELECT MBTI_FK FROM User WHERE userid = ?), (SELECT MBTI_FK FROM User WHERE userid = ?), 1)
+    `;
+    await connection.query(insertLogQuery, [chatroomId, userId, userId, userId, userId]);
+  } else {
+    const updateLogQuery = `
+      UPDATE ChatLog SET message_count = message_count + 1 WHERE chatroom_id = ?
+    `;
+    await connection.query(updateLogQuery, [chatroomId]);
+  }
+};
+
+const updateMBTIPercentage = async () => {
+  const logsQuery = 'SELECT * FROM ChatLog';
+  const [logs] = await connection.query(logsQuery);
+
+  for (const log of logs) {
+    const previousMessageCount = log.message_count;
+    const currentMessageCount = log.message_count; // 예시로 현재 메시지 수는 바로 이전과 같다고 가정
+    
+    const changeRatio = ((currentMessageCount - previousMessageCount) / previousMessageCount) * 100;
+    let percentageChange = 0;
+
+    if (changeRatio >= 40) {
+      percentageChange = 3;
+    } else if (changeRatio >= 30) {
+      percentageChange = 2;
+    } else if (changeRatio >= 20) {
+      percentageChange = 1;
+    } else if (changeRatio <= -40) {
+      percentageChange = -3;
+    } else if (changeRatio <= -30) {
+      percentageChange = -2;
+    } else if (changeRatio <= -20) {
+      percentageChange = -1;
+    }
+
+    if (Math.abs(changeRatio) >= 10) {
+      const updatePercentageQuery = `
+        UPDATE MBTI_Percentage
+        SET percentage = LEAST(100, GREATEST(0, percentage + ?))
+        WHERE MBTI_1 = ? AND MBTI_2 = ?
+      `;
+      await connection.query(updatePercentageQuery, [percentageChange, log.user1_mbti, log.user2_mbti]);
+    }
+  }
+};
+
 module.exports = {
   createChatRoom,
   getMessages,
   createMessage,
   deleteChatRoom,
-  deleteMessage
+  deleteMessage,
+  updateChatLog,
+  updateMBTIPercentage
 };

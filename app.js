@@ -28,6 +28,7 @@ const chatRouter = require('./routes/chat');
 const app = express();
 const boardRouter = require('./routes/board');
 
+
 app.use(flash()); 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
