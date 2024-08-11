@@ -56,7 +56,23 @@ const deleteMessage = async (req, res) => {
   }
 };
 
+const getMBTIPercentage = async (req, res) => {
+  const { mbti1, mbti2 } = req.query;
+  try {
+    const percentage = await chatService.getMBTIPercentage(mbti1, mbti2);
+    if (percentage !== null) {
+      res.json({ mbti1, mbti2, percentage });
+    } else {
+      res.status(404).json({ error: 'MBTI 조합을 찾을 수 없습니다.' });
+    }
+  } catch (err) {
+    console.error('Error fetching MBTI percentage:', err);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+};
+
 module.exports = {
+  getMBTIPercentage,
   createChatRoom,
   getMessages,
   createMessage,

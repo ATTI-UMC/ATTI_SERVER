@@ -83,7 +83,23 @@ const updateMBTIPercentage = async () => {
   }
 };
 
+const getMBTIPercentage = async (mbti1, mbti2) => {
+  const query = `
+    SELECT percentage 
+    FROM MBTI_Percentage 
+    WHERE 
+      (MBTI_1 = (SELECT MBTI_ID FROM MBTI WHERE type = ?) 
+       AND MBTI_2 = (SELECT MBTI_ID FROM MBTI WHERE type = ?))
+      OR 
+      (MBTI_1 = (SELECT MBTI_ID FROM MBTI WHERE type = ?) 
+       AND MBTI_2 = (SELECT MBTI_ID FROM MBTI WHERE type = ?))
+  `;
+  const [results] = await connection.query(query, [mbti1, mbti2, mbti2, mbti1]);
+  return results.length > 0 ? results[0].percentage : null;
+};
+
 module.exports = {
+  getMBTIPercentage,
   createChatRoom,
   getMessages,
   createMessage,

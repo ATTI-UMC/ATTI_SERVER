@@ -29,11 +29,16 @@ const updateMBTIPercentage = async () => {
   await chatDao.updateMBTIPercentage();
 };
 
+const getMBTIPercentage = async (mbti1, mbti2) => {
+  return await chatDao.getMBTIPercentage(mbti1, mbti2);
+};
+
 const schedule = require('node-schedule');
 schedule.scheduleJob('0 0 * * *', updateMBTIPercentage);
 
 
 module.exports = {
+  getMBTIPercentage,
   createChatRoom,
   getMessages,
   createMessage,
