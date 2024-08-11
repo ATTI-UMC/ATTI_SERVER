@@ -8,5 +8,6 @@ router.get('/:chatroomId/messages', checkAuthenticated, chatController.getMessag
 router.post('/:chatroomId/messages', checkAuthenticated, chatController.createMessage);
 router.delete('/:chatroomId', checkAuthenticated, chatController.deleteChatRoom);
 router.delete('/:chatroomId/messages/:messageId', checkAuthenticated, chatController.deleteMessage);
+router.get('/percentage', checkAuthenticated, chatController.getMBTIPercentage);
 
 module.exports = router;
