@@ -6,7 +6,7 @@ const userSwaggerPath = path.join(__dirname, 'user_swagger.yaml');
 const groupChatSwaggerPath = path.join(__dirname, 'group_chat_swagger.yaml');
 const joinSwaggerPath = path.join(__dirname, 'join_swagger.yaml');
 const blockSwaggerPath = path.join(__dirname, 'block_swagger.yaml');
-const notificationSwaggerPath = path.join(__dirname, 'notification_swagger.yaml');
+const notificationSwaggerPath = path.join(__dirname, 'notifications_swagger.yaml');
 const personalChatSwaggerPath = path.join(__dirname, 'chat.yaml'); 
 const reportSwaggerPath=path.join(__dirname,'report_swagger.yaml');
 
