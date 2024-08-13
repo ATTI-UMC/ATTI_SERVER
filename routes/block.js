@@ -19,11 +19,10 @@ router.post('/', (req, res) => {
         if (err) {
             res.status(500).json({ error: err.message });
         } else {
-            res.status(201).json({ block_id: result.insertId });
+            res.status(201).json({ block_id: block_id });
         }
     });
   });
-  
 
 // 차단 목록에서 사용자 삭제
 router.delete('/', (req, res) => {
