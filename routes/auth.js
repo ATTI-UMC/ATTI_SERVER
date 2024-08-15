@@ -30,10 +30,6 @@ router.post('/login', async (req, res) => {
     }
 
     const isValidPassword = await verifyPassword(user, password);
-    console.log('찾은 사용자:', user);
-    console.log('입력한 비밀번호:', password);
-    console.log('유효한 비밀번호:', isValidPassword);
-
     if (!isValidPassword) {
       return res.status(401).json({ message: '비밀번호가 잘못되었습니다.' });
     }
