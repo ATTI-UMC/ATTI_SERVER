@@ -27,6 +27,7 @@ const commentLikesRouter = require('./routes/commentLikes');
 const chatRouter = require('./routes/chat'); 
 const app = express();
 const boardRouter = require('./routes/board');
+const profileRouter = require('./routes/profile');
 
 
 app.use(flash()); 
@@ -71,6 +72,8 @@ app.use('/report',reportRouter);
 app.use('/comments', commentRouter); 
 app.use('/commentActions', commentActionsRouter); 
 app.use('/commentLikes', commentLikesRouter); 
+app.use('/profile', profileRouter);
+
 
 app.get('/oauth/naver', 
   passport.authenticate('naver', { failureRedirect: '/' }),
