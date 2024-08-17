@@ -20,7 +20,7 @@ components:
           type: integer
           description: The ID of the chat room
         userId:
-          type: string
+          type: integer
           description: The ID of the user
         content:
           type: string
@@ -38,7 +38,7 @@ components:
           type: integer
           description: The ID of the chat room
         userId:
-          type: string
+          type: integer
           description: The ID of the user
         content:
           type: string
@@ -65,7 +65,7 @@ paths:
               type: object
               properties:
                 userId:
-                  type: string
+                  type: integer
                   description: The ID of the user creating the chat room
                 content:
                   type: string
@@ -146,7 +146,7 @@ paths:
               type: object
               properties:
                 userId:
-                  type: string
+                  type: integer
                   description: The ID of the user sending the message
                 content:
                   type: string
