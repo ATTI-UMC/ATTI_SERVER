@@ -11,7 +11,8 @@ const notificationSwaggerPath = path.join(__dirname, 'notifications_swagger.yaml
 const personalChatSwaggerPath = path.join(__dirname, 'chat.yaml'); 
 const reportSwaggerPath = path.join(__dirname, 'report_swagger.yaml');
 const mbtiUpdateSwaggerPath = path.join(__dirname, 'mbti_update_swagger.yaml');
-const authSwaggerPath = path.join(__dirname, 'auth_swagger.yaml'); // auth_swagger.yaml 추가
+const authSwaggerPath = path.join(__dirname, 'auth_swagger.yaml'); 
+const boardSwaggerPath = path.join(__dirname, 'board_swagger.yaml'); 
 
 // Swagger 문서 로드
 const userSwaggerSpec = yaml.load(userSwaggerPath);
@@ -22,7 +23,8 @@ const notificationSwaggerSpec = yaml.load(notificationSwaggerPath);
 const personalChatSwaggerSpec = yaml.load(personalChatSwaggerPath);
 const reportSwaggerSpec = yaml.load(reportSwaggerPath);
 const mbtiUpdateSwaggerSpec = yaml.load(mbtiUpdateSwaggerPath);
-const authSwaggerSpec = yaml.load(authSwaggerPath); // auth_swagger.yaml 로드
+const authSwaggerSpec = yaml.load(authSwaggerPath); 
+const boardSwaggerSpec = yaml.load(boardSwaggerPath);
 
 // Swagger 문서 통합
 const combinedSpec = {
@@ -41,7 +43,8 @@ const combinedSpec = {
     ...reportSwaggerSpec.paths,
     ...personalChatSwaggerSpec.paths,
     ...mbtiUpdateSwaggerSpec.paths,
-    ...authSwaggerSpec.paths // 사용자 인증 경로 추가
+    ...authSwaggerSpec.paths, 
+    ...boardSwaggerSpec.paths 
   },
   components: {
     schemas: {
@@ -52,7 +55,9 @@ const combinedSpec = {
       ...notificationSwaggerSpec.components?.schemas,
       ...reportSwaggerSpec.components?.schemas,
       ...personalChatSwaggerSpec.components?.schemas,
-      ...mbtiUpdateSwaggerSpec.components?.schemas 
+      ...mbtiUpdateSwaggerSpec.components?.schemas,
+      ...authSwaggerSpec.components?.schemas, 
+      ...boardSwaggerSpec.components?.schemas
     }
   }
 };
