@@ -1,0 +1,114 @@
+openapi: 3.0.0
+info:
+  title: User Authentication API
+  version: 1.0.0
+  description: API for user authentication, including login and registration.
+
+paths:
+  /auth/register:
+    post:
+      summary: User Registration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: "user123"
+                password:
+                  type: string
+                  example: "password123"
+              required:
+                - id
+                - password
+      responses:
+        '200':
+          description: 회원가입 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "회원가입 성공"
+        '409':
+          description: ID가 이미 사용 중입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "ID가 이미 사용 중입니다."
+        '500':
+          description: 서버 오류
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "서버 오류"
+
+  /auth/login:
+    post:
+      summary: User Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: "user123"
+                password:
+                  type: string
+                  example: "password123"
+              required:
+                - id
+                - password
+      responses:
+        '200':
+          description: 로그인 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "로그인 성공"
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: "user123"
+        '401':
+          description: 사용자 또는 비밀번호 오류
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "사용자를 찾을 수 없습니다." # 또는 "비밀번호가 잘못되었습니다."
+        '500':
+          description: 서버 오류
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "서버 오류"

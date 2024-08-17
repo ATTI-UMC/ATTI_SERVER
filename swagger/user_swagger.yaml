@@ -17,6 +17,7 @@ paths:
             text/html:
               schema:
                 type: string
+
   /profile:
     get:
       summary: User profile page
@@ -32,6 +33,7 @@ paths:
           description: Redirect to home if not authenticated
       security:
         - sessionAuth: []
+
   /user/mbti:
     post:
       summary: Update user MBTI
@@ -54,6 +56,7 @@ paths:
           description: Internal server error
       security:
         - sessionAuth: []
+
   /logout:
     get:
       summary: Logout
@@ -63,6 +66,7 @@ paths:
           description: Redirect to home page
       security:
         - sessionAuth: []
+
   /user/{id}:
     get:
       summary: Get user information
@@ -83,9 +87,31 @@ paths:
                 properties:
                   userid:
                     type: integer
+                  id:
+                    type: string
+                  nickname:
+                    type: string
                   name:
                     type: string
+                  age:
+                    type: integer
+                  school:
+                    type: string
                   MBTI_FK:
+                    type: string
+                  department:
+                    type: string
+                  interest_tags:
+                    type: string
+                  username:
+                    type: string
+                  status:
+                    type: string
+                  student_id:
+                    type: string
+                  is_student:
+                    type: boolean
+                  introduce:
                     type: string
         '404':
           description: User not found
@@ -93,3 +119,70 @@ paths:
           description: Internal server error
       security:
         - sessionAuth: []
+
+  /profile/complete/step1:
+    post:
+      summary: Complete user profile - Step 1
+      description: Updates the user's nickname, age, and gender
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                nickname:
+                  type: string
+                  description: User's nickname
+                age:
+                  type: integer
+                  description: User's age
+                gender:
+                  type: string
+                  description: User's gender
+              required:
+                - nickname
+                - age
+                - gender
+      responses:
+        '302':
+          description: Redirect to step 2 on success
+        '500':
+          description: Internal server error
+      security:
+        - sessionAuth: []
+
+  /profile/complete/step2:
+    post:
+      summary: Complete user profile - Step 2
+      description: Updates the user's student status and one-line introduction
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                is_student:
+                  type: boolean
+                  description: Whether the user is a student
+                introduce:
+                  type: string
+                  description: A short bio or one-liner introduction
+              required:
+                - is_student
+                - introduce
+      responses:
+        '302':
+          description: Redirect to profile page on success
+        '500':
+          description: Internal server error
+      security:
+        - sessionAuth: []
+
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: sessionId
