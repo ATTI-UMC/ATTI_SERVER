@@ -89,7 +89,7 @@ paths:
                 user_id:
                   type: integer
                 notification_id:
-                  type: ingeter
+                  type: integer
               required:
                 - user_id
                 - notification_id
@@ -126,6 +126,52 @@ paths:
                     example: Internal server error
       security:
         - sessionAuth: []
+        
+  /notifications/{notification_id}/read:
+    put:
+      summary: Mark a notification as read
+      description: Marks a specific notification as read
+      tags:
+        - Notifications
+      parameters:
+        - in: path
+          name: notification_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Notification marked as read
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Notification marked as read
+        '404':
+          description: Notification not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Notification not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+      security:
+        - sessionAuth: []
 components:
   securitySchemes:
     sessionAuth:
@@ -134,3 +180,4 @@ components:
       name: connect.sid # express-session의 기본 쿠키 이름
 security:
   - sessionAuth: []
+
