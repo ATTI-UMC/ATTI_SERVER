@@ -14,5 +14,7 @@ router.get('/:groupChatRoomId/messages', groupChatController.getMessages);
 router.delete('/message/:messageId', groupChatController.deleteMessage);
 router.delete('/:id', groupChatController.deleteGroupChat);
 
+router.post('/match/mbti', groupChatController.matchByMBTI);
+router.post('/match/random', groupChatController.randomMatch);
 
 module.exports = router;

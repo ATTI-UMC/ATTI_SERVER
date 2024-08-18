@@ -20,7 +20,7 @@ components:
           type: integer
           description: The ID of the chat room
         userId:
-          type: string
+          type: integer
           description: The ID of the user
         content:
           type: string

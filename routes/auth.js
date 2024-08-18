@@ -73,6 +73,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
+
 function handleAuthCallback(req, res) {
   console.log(`${req.user.provider} 로그인 성공`);
   res.redirect('/profile');
