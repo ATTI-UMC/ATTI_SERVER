@@ -3,8 +3,8 @@ const groupChatService = require('../service/groupChatService');
 class GroupChatController {
   async createGroupChat(req, res) {
     try {
-      const { userId, content } = req.body;
-      const groupChatRoomId = await groupChatService.createGroupChat(userId, content);
+      const { userId, title, interest_tags } = req.body;
+      const groupChatRoomId = await groupChatService.createGroupChat(userId, title, interest_tags);
       res.status(201).json({ groupChatRoomId });
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -68,6 +68,32 @@ class GroupChatController {
       const { id } = req.params;
       await groupChatService.deleteGroupChat(id);
       res.status(200).json({ message: 'Group chat deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+  async matchByMBTI(req, res) {
+    try {
+      const { mbti } = req.body;
+      const groupChatRoomId = await groupChatService.matchByMBTI(mbti);
+      if (groupChatRoomId) {
+        res.status(200).json({ groupChatRoomId });
+      } else {
+        res.status(404).json({ message: 'No matching group chat found' });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+  
+  async randomMatch(req, res) {
+    try {
+      const groupChatRoomId = await groupChatService.randomMatch();
+      if (groupChatRoomId) {
+        res.status(200).json({ groupChatRoomId });
+      } else {
+        res.status(404).json({ message: 'No available group chat found' });
+      }
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

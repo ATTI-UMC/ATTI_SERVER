@@ -1,8 +1,8 @@
 const groupChatDao = require('../dao/groupChatDao');
 
 class GroupChatService {
-  async createGroupChat(userId, content) {
-    const groupChatRoomId = await groupChatDao.createGroupChat(userId, content);
+  async createGroupChat(userId, Title,interest_tags) {
+    const groupChatRoomId = await groupChatDao.createGroupChat(userId, Title,interest_tags);
     return groupChatRoomId;
   }
 
@@ -32,6 +32,16 @@ class GroupChatService {
 
   async deleteGroupChat(id) {
     await groupChatDao.deleteGroupChat(id);
+  }
+  
+  async matchByMBTI(mbti) {
+    const matchedGroupChat = await groupChatDao.findGroupChatByMBTI(mbti);
+    return matchedGroupChat ? matchedGroupChat.group_chatroom_id : null;
+  }
+  
+  async randomMatch() {
+    const randomGroupChat = await groupChatDao.getRandomGroupChat();
+    return randomGroupChat ? randomGroupChat.group_chatroom_id : null;
   }
 }
 
