@@ -1,6 +1,6 @@
 const mysql = require('mysql'); 
 const express = require('express');
-const { addUserInfo } = require('../models/adduser');
+const { addUserInfo ,updateUserInfo} = require('../models/adduser');
 const router = express.Router();
 
 // MySQL 연결 설정
@@ -43,16 +43,15 @@ router.post('/complete/step1', async (req, res) => {
   }
 
   const { nickname, age, gender } = req.body;
-  const userId = req.user.id;
+  const userId = req.user.userid;
 
   try {
     // 사용자 정보 업데이트
-    await addUserInfo(userId, {
+    await updateUserInfo(userId, {
       nickname: nickname || null,
       age: age || null,
       gender: gender || null,
     });
-
     // 성공적으로 업데이트된 후 JSON 응답
     res.json({ message: '사용자 정보가 성공적으로 업데이트되었습니다.' });
   } catch (error) {
@@ -60,7 +59,6 @@ router.post('/complete/step1', async (req, res) => {
     res.status(500).json({ message: '정보 저장 중 오류가 발생했습니다.' });
   }
 });
-
 // 사용자 정보 업데이트 - Step 2
 router.post('/complete/step2', async (req, res) => {
   if (!req.isAuthenticated()) {
@@ -68,11 +66,11 @@ router.post('/complete/step2', async (req, res) => {
   }
 
   const { is_student, introduce } = req.body;
-  const userId = req.user.id;
+  const userId = req.user.userid;
 
   try {
     // 재학생 여부와 한줄소개 업데이트
-    await addUserInfo(userId, {
+    await updateUserInfo(userId, {
       is_student: is_student === 'true', // boolean 처리
       introduce: introduce || null,
     });

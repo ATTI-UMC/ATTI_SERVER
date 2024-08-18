@@ -42,6 +42,29 @@ async function addUserInfo(userInfo) {
     throw error;
   }
 }
+// 사용자 정보 업데이트 함수
+async function updateUserInfo(userId, updateFields) {
+  if (!userId || !updateFields) {
+    throw new Error('userId와 updateFields는 null일 수 없습니다.');
+  }
+
+  const fields = Object.keys(updateFields);
+  const values = Object.values(updateFields);
+
+  try {
+    // 동적으로 업데이트 쿼리 생성
+    const setClause = fields.map(field => `${field} = ?`).join(', ');
+    const query = `UPDATE User SET ${setClause} WHERE userid = ?`;
+
+    // 사용자 정보 업데이트
+    const [result] = await PromiseConnection.query(query, [...values, userId]);
+
+    return result; // 업데이트 결과 반환
+  } catch (error) {
+    console.error('Error updating user info:', error);
+    throw error;
+  }
+}
 
 
 const findUserById = (id) => {
@@ -60,4 +83,4 @@ const verifyPassword = (user, password) => {
 };
 
 
-module.exports = { addUserInfo,findUserById, verifyPassword };
+module.exports = { addUserInfo,findUserById, verifyPassword,updateUserInfo};
