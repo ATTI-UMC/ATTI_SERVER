@@ -31,23 +31,23 @@ router.post('/', (req, res) => {
     });
   });
   
-  // 알림 조회 API
-  router.get('/:user_id', (req, res) => {
-    const { user_id } = req.params;
-    connection.query('SELECT * FROM Notification WHERE user_id = ?', [user_id], (error, results) => {
-      if (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Internal server error' });
-      }
-  
-      else if (results.length === 0) {
-        return res.status(404).json({ error: 'No notifications found' });
-      }
-      else{
-      res.status(200).json(results);
-      }
-    });
+  // 알림 조회 API (읽음 여부 포함)
+router.get('/:user_id', (req, res) => {
+  const { user_id } = req.params;
+  connection.query('SELECT * FROM Notification WHERE user_id = ?', [user_id], (error, results) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'No notifications found' });
+    }
+
+    res.status(200).json(results);
   });
+});
+
 
 // 알림 삭제 API
 router.delete('/', (req, res) => {
@@ -63,5 +63,24 @@ router.delete('/', (req, res) => {
     }
   });
 });
+
+// 알림 읽음 상태 API
+router.put('/:notification_id/read', (req, res) => {
+  const { notification_id } = req.params;
+  const query = 'UPDATE Notification SET is_read = 1 WHERE notification_id = ?';
+
+  connection.query(query, [notification_id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Notification not found' });
+    }
+
+    res.status(200).json({ message: 'Notification marked as read' });
+  });
+});
+
 
   module.exports = router;
