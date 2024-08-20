@@ -9,5 +9,10 @@ router.post('/:chatroomId/messages', checkAuthenticated, chatController.createMe
 router.delete('/:chatroomId', checkAuthenticated, chatController.deleteChatRoom);
 router.delete('/:chatroomId/messages/:messageId', checkAuthenticated, chatController.deleteMessage);
 router.get('/percentage', checkAuthenticated, chatController.getMBTIPercentage);
+router.post('/create', checkAuthenticated, chatController.createChatRoom);
+router.get('/rooms', checkAuthenticated, chatController.getChatRooms);
+router.post('/random-match', checkAuthenticated, chatController.randomMatch);
+router.get('/rooms/user', checkAuthenticated, chatController.getChatRoomsByUser);
+router.get('/rooms/tags', checkAuthenticated, chatController.getChatRoomsByTags);
 
 module.exports = router;

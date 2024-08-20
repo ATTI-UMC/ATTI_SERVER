@@ -1,0 +1,128 @@
+openapi: 3.0.0
+info:
+  title: Chat API
+  description: API documentation for the chat system including chat room creation and MBTI-based random matching.
+  version: 1.0.0
+paths:
+  /chat/create:
+    post:
+      summary: Create a new chat room
+      description: Creates a new chat room with a title and interest tags.
+      tags:
+        - ChatRoom
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                useId: 
+                  type: integer
+                title:
+                  type: string
+                  example: "Developers' Lounge"
+                interest_tags:
+                  type: string
+                  example: "JavaScript,NodeJS,Backend"
+      responses:
+        '200':
+          description: Chat room created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chatroomId:
+                    type: integer
+                    example: 1
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "An error occurred"
+                  
+  /chat/rooms:
+    get:
+      summary: Get all chat rooms
+      description: Retrieves a list of all chat rooms with their details.
+      tags:
+        - ChatRoom
+      responses:
+        '200':
+          description: A list of chat rooms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    chatroom_id:
+                      type: integer
+                      example: 1
+                    title:
+                      type: string
+                      example: "Developers' Lounge"
+                    interest_tags:
+                      type: string
+                      example: "JavaScript,NodeJS,Backend"
+                    nickname:
+                      type: string
+                      example: "DevGuru"
+                    MBTI_FK:
+                      type: string
+                      example: "INTJ"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "An error occurred"
+
+  /chat/random-match:
+    post:
+      summary: Random match based on MBTI compatibility
+      description: Creates a new chat room by matching the current user with the most compatible user based on MBTI.
+      tags:
+        - ChatRoom
+      responses:
+        '200':
+          description: Chat room created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chatroomId:
+                    type: integer
+                    example: 2
+        '404':
+          description: No matches found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No matches found"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "An error occurred"

@@ -1,8 +1,11 @@
 const connection = require('../config/db');
 
-const createChatRoom = async (userId, content) => {
-  const query = 'INSERT INTO ChatRoom (user_id, content) VALUES (?, ?)';
-  const [results] = await connection.query(query, [userId, content]);
+const createChatRoom = async (userId, title, interest_tags) => {
+  const query = `
+      INSERT INTO ChatRoom (user_id, title, interest_tags)
+      VALUES (?, ?, ?)
+  `;
+  const [results] = await connection.query(query, [userId, title, interest_tags]);
   return results.insertId;
 };
 
@@ -98,6 +101,54 @@ const getMBTIPercentage = async (mbti1, mbti2) => {
   return results.length > 0 ? results[0].percentage : null;
 };
 
+const getChatRooms = async () => {
+  const query = `
+      SELECT c.chatroom_id, c.title, c.interest_tags, u.nickname, u.MBTI_FK
+      FROM ChatRoom c
+      JOIN User u ON c.user_id = u.userid
+  `;
+  const [results] = await connection.query(query);
+  return results;
+};
+
+const getPotentialMatches = async (userMbti) => {
+  const query = `
+      SELECT u.userid, u.nickname, u.MBTI_FK, m.percentage
+      FROM User u
+      JOIN MBTI_Percentage m ON (m.MBTI_1 = (SELECT MBTI_ID FROM MBTI WHERE type = ?) 
+      AND m.MBTI_2 = (SELECT MBTI_ID FROM MBTI WHERE type = u.MBTI_FK))
+      OR (m.MBTI_2 = (SELECT MBTI_ID FROM MBTI WHERE type = ?) 
+      AND m.MBTI_1 = (SELECT MBTI_ID FROM MBTI WHERE type = u.MBTI_FK))
+      ORDER BY m.percentage DESC;
+  `;
+  const [results] = await connection.query(query, [userMbti, userMbti]);
+  return results;
+};
+
+const getChatRoomsByUser = async (userId) => {
+  const query = `
+      SELECT c.chatroom_id, c.title, c.interest_tags, u.nickname, u.MBTI_FK
+      FROM ChatRoom c
+      JOIN User u ON c.user_id = u.userid
+      WHERE c.user_id = ?
+  `;
+  const [results] = await connection.query(query, [userId]);
+  return results;
+};
+
+// 특정 해시태그를 포함하는 채팅방 목록을 조회
+const getChatRoomsByTags = async (interestTags) => {
+  const query = `
+      SELECT c.chatroom_id, c.title, c.interest_tags, u.nickname, u.MBTI_FK
+      FROM ChatRoom c
+      JOIN User u ON c.user_id = u.userid
+      WHERE FIND_IN_SET(?, c.interest_tags)
+  `;
+  const [results] = await connection.query(query, [interestTags]);
+  return results;
+};
+
+
 module.exports = {
   getMBTIPercentage,
   createChatRoom,
@@ -106,5 +157,9 @@ module.exports = {
   deleteChatRoom,
   deleteMessage,
   updateChatLog,
+  getPotentialMatches,
+  getChatRooms,
+  getChatRoomsByUser,
+  getChatRoomsByTags,
   updateMBTIPercentage
 };

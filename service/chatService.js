@@ -1,8 +1,8 @@
 const chatDao = require('../dao/chatDao');
 
 
-const createChatRoom = async (userId, content) => {
-  return await chatDao.createChatRoom(userId, content);
+const createChatRoom = async (userId, title, interest_tags) => {
+  return await chatDao.createChatRoom(userId, title, interest_tags);
 };
 
 const getMessages = async (chatroomId) => {
@@ -36,6 +36,29 @@ const getMBTIPercentage = async (mbti1, mbti2) => {
 const schedule = require('node-schedule');
 schedule.scheduleJob('0 0 * * *', updateMBTIPercentage);
 
+const getChatRooms = async () => {
+  return await chatDao.getChatRooms();
+};
+
+const getPotentialMatches = async (userMbti) => {
+  return await chatDao.getPotentialMatches(userMbti);
+};
+
+const joinChatRoom = async (chatroomId, userId) => {
+  const query = `
+      INSERT INTO ChatRoomUser (chatroom_id, user_id)
+      VALUES (?, ?)
+  `;
+  await connection.query(query, [chatroomId, userId]);
+};
+
+const getChatRoomsByUser = async (userId) => {
+  return await chatDao.getChatRoomsByUser(userId);
+};
+
+const getChatRoomsByTags = async (interestTags) => {
+  return await chatDao.getChatRoomsByTags(interestTags);
+};
 
 module.exports = {
   getMBTIPercentage,
@@ -43,5 +66,9 @@ module.exports = {
   getMessages,
   createMessage,
   deleteChatRoom,
+  getChatRooms,
+  getPotentialMatches,
+  joinChatRoom,
+  getChatRoomsByUser,
   deleteMessage
 };

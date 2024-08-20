@@ -1,0 +1,103 @@
+openapi: 3.0.0
+info:
+  title: Chat Room API
+  description: API documentation for the chat room filtering by user and tags.
+  version: 1.0.0
+paths:
+  /chat/rooms/user:
+    get:
+      summary: Get chat rooms created by a specific user
+      description: Retrieves a list of chat rooms created by the specified user.
+      tags:
+        - ChatRoom
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: ID of the user whose chat rooms are to be retrieved
+      responses:
+        '200':
+          description: A list of chat rooms created by the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    chatroom_id:
+                      type: integer
+                      example: 1
+                    title:
+                      type: string
+                      example: "Developers' Lounge"
+                    interest_tags:
+                      type: string
+                      example: "JavaScript,NodeJS,Backend"
+                    nickname:
+                      type: string
+                      example: "DevGuru"
+                    MBTI_FK:
+                      type: string
+                      example: "INTJ"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "An error occurred"
+  
+  /chat/rooms/tags:
+    get:
+      summary: Get chat rooms with a specific interest tag
+      description: Retrieves a list of chat rooms that contain the specified interest tag.
+      tags:
+        - ChatRoom
+      parameters:
+        - in: query
+          name: interest_tags
+          schema:
+            type: string
+          required: true
+          description: Interest tag to filter the chat rooms
+      responses:
+        '200':
+          description: A list of chat rooms with the specified interest tag
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    chatroom_id:
+                      type: integer
+                      example: 2
+                    title:
+                      type: string
+                      example: "Frontend Discussion"
+                    interest_tags:
+                      type: string
+                      example: "JavaScript,React"
+                    nickname:
+                      type: string
+                      example: "FrontendMaster"
+                    MBTI_FK:
+                      type: string
+                      example: "ENFP"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "An error occurred"
