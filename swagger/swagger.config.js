@@ -13,6 +13,9 @@ const reportSwaggerPath = path.join(__dirname, 'report_swagger.yaml');
 const mbtiUpdateSwaggerPath = path.join(__dirname, 'mbti_update_swagger.yaml');
 const authSwaggerPath = path.join(__dirname, 'auth_swagger.yaml'); 
 const boardSwaggerPath = path.join(__dirname, 'board_swagger.yaml'); 
+const chatSwaggerPath = path.join(__dirname, 'chat_swagger.yaml');
+const chatRoomsSwaggerPath = path.join(__dirname, 'chat_rooms_swagger.yaml');
+
 
 // Swagger 문서 로드
 const userSwaggerSpec = yaml.load(userSwaggerPath);
@@ -25,6 +28,8 @@ const reportSwaggerSpec = yaml.load(reportSwaggerPath);
 const mbtiUpdateSwaggerSpec = yaml.load(mbtiUpdateSwaggerPath);
 const authSwaggerSpec = yaml.load(authSwaggerPath); 
 const boardSwaggerSpec = yaml.load(boardSwaggerPath);
+const chatSwaggerSpec = yaml.load(chatSwaggerPath);
+const chatRoomsSwaggerSpec = yaml.load(chatRoomsSwaggerPath); 
 
 // Swagger 문서 통합
 const combinedSpec = {
@@ -44,7 +49,9 @@ const combinedSpec = {
     ...personalChatSwaggerSpec.paths,
     ...mbtiUpdateSwaggerSpec.paths,
     ...authSwaggerSpec.paths, 
-    ...boardSwaggerSpec.paths 
+    ...boardSwaggerSpec.paths,
+    ...chatSwaggerSpec.paths,
+    ...chatRoomsSwaggerSpec.paths
   },
   components: {
     schemas: {
@@ -57,7 +64,9 @@ const combinedSpec = {
       ...personalChatSwaggerSpec.components?.schemas,
       ...mbtiUpdateSwaggerSpec.components?.schemas,
       ...authSwaggerSpec.components?.schemas, 
-      ...boardSwaggerSpec.components?.schemas
+      ...boardSwaggerSpec.components?.schemas,
+      ...chatSwaggerSpec.components?.schemas,
+      ...chatRoomsSwaggerSpec.components?.schemas
     }
   }
 };
